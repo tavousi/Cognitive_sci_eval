@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>داشبورد جامع ارزیابی سند راهبردی علوم و فناوری‌های شناختی (افق ۱۴۰۴)</title>
+<link rel="icon" type="image/svg+xml" href="./favicon.svg">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#f8fafc; --card:#ffffff; --text:#0f172a; --muted:#64748b;
+  --border:#e2e8f0; --primary:#1e40af; --primary-dark:#1e3a8a; --primary-light:#3b82f6;
+  --green-dark:#15803d; --green-light:#16a34a;
+  --yellow:#ca8a04; --orange:#ea580c; --red:#dc2626;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.05);
+  --shadow:0 4px 6px -1px rgba(0,0,0,.08), 0 2px 4px -2px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+@font-face{font-family:'Sahel';src:url('./Sahel-VF.woff2') format('woff2');font-weight:normal;font-style:normal;font-display:swap}
+
+/* اعمال فونت روی بدنه و تمامی المان‌های فرم و دکمه‌ها */
+body, input, select, textarea, button, table {
+    font-family: 'Sahel', Tahoma, 'Segoe UI', Arial, sans-serif;
+}
+body { background: var(--bg); color: var(--text); line-height: 1.6; }
+
+.container{max-width:1440px;margin:0 auto;padding:20px}
+header{background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);color:#fff;padding:22px 28px;border-radius:14px;margin-bottom:20px;box-shadow:var(--shadow-lg)}
+.brand-header{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.brand-identity{display:flex;align-items:center;gap:18px;min-width:0}
+.brand-mark{width:76px;height:76px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+.brand-mark img{max-width:100%;max-height:100%;object-fit:contain}
+.brand-title{font-size:1.55rem;font-weight:bold;margin-bottom:5px;letter-spacing:-.5px}
+.brand-subtitle{font-size:.92rem;opacity:.9;line-height:1.6}
+.brand-credit{margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.18);font-size:.82rem;opacity:.88;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+nav.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;background:#fff;padding:8px 12px;border-radius:12px;box-shadow:var(--shadow-sm);border:1px solid var(--border)}
+nav.tabs button{padding:10px 18px;border:none;background:transparent;cursor:pointer;border-radius:8px;font-family:inherit;font-size:.95rem;font-weight:600;color:var(--muted);transition:all .2s;display:flex;align-items:center;gap:8px}
+nav.tabs button:hover{background:#f1f5f9;color:var(--text)}
+nav.tabs button.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-sm)}
+.card{background:var(--card);border-radius:12px;padding:22px;box-shadow:var(--shadow-sm);border:1px solid var(--border);margin-bottom:20px}
+.card h2{font-size:1.25rem;margin-bottom:15px;color:var(--primary-dark);border-bottom:2px solid var(--border);padding-bottom:8px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.card h3{font-size:1.05rem;margin:14px 0 8px;color:#1e293b}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:20px}
+.stat-box{background:#fff;padding:18px;border-radius:10px;box-shadow:var(--shadow-sm);border:1px solid var(--border);border-right:4px solid var(--primary);transition:transform .2s}
+.stat-box:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.stat-box .label{font-size:.82rem;color:var(--muted);margin-bottom:6px;font-weight:500}
+.stat-box .value{font-size:1.65rem;font-weight:bold;color:var(--text)}
+.stat-box .subvalue{font-size:.78rem;color:var(--muted);margin-top:4px}
+.stat-box.green-dark{border-right-color:var(--green-dark)}
+.stat-box.green-light{border-right-color:var(--green-light)}
+.stat-box.yellow{border-right-color:var(--yellow)}
+.stat-box.orange{border-right-color:var(--orange)}
+.stat-box.red{border-right-color:var(--red)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px;background:#fff;padding:12px 18px;border-radius:10px;border:1px solid var(--border)}
+.toolbar .btn{white-space:nowrap}
+.btn{padding:8px 16px;border:none;border-radius:6px;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:500;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark)}
+.btn-secondary{background:#f1f5f9;color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{background:#e2e8f0}
+.btn-success{background:var(--green-dark);color:#fff}
+.btn-success:hover{background:#166534}
+.btn-danger{background:var(--red);color:#fff}
+.btn-outline{background:transparent;border:1px solid var(--primary);color:var(--primary)}
+.btn-sm{padding:4px 10px;font-size:.8rem;border-radius:4px}
+.badge{display:inline-block;padding:4px 10px;border-radius:14px;font-size:.75rem;font-weight:600;color:#fff;white-space:nowrap}
+.badge-green-dark{background:var(--green-dark)}
+.badge-green-light{background:var(--green-light)}
+.badge-yellow{background:var(--yellow)}
+.badge-orange{background:var(--orange)}
+.badge-red{background:var(--red)}
+.ci-pill{background:#e2e8f0;color:#334155;padding:2px 8px;border-radius:6px;font-size:.78rem;font-family:monospace;direction:ltr;display:inline-block}
+.pyramid-wrap{display:flex;flex-direction:column;gap:12px;margin:20px 0}
+.pyramid-step{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 18px;border-right:6px solid var(--primary);transition:all .2s}
+.pyramid-step:hover{box-shadow:var(--shadow);transform:translateX(-2px)}
+.pyramid-name{width:220px;font-weight:bold;font-size:.95rem}
+.pyramid-bar{flex:1;height:24px;background:#e2e8f0;border-radius:6px;overflow:hidden;position:relative}
+.pyramid-fill{height:100%;border-radius:6px;display:flex;align-items:center;justify-content:flex-end;padding:0 10px;color:#fff;font-size:.82rem;font-weight:bold;transition:width .5s}
+.pyramid-val{width:80px;text-align:left;font-weight:bold;font-size:.95rem}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}
+.filters input,.filters select{padding:9px 14px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:.9rem;background:#fff}
+.filters input{flex:1;min-width:220px}
+table.custom-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.88rem}
+table.custom-table th,table.custom-table td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--border)}
+table.custom-table th{background:#f8fafc;font-weight:bold;color:#334155}
+table.custom-table tbody tr:hover{background:#f8fafc}
+table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px solid #cbd5e1}
+.action-card{border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:18px;background:#fff;box-shadow:var(--shadow-sm);transition:all .2s}
+.action-card:hover{box-shadow:var(--shadow)}
+.action-head{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:12px}
+.action-title{font-size:1.05rem;font-weight:bold;color:#0f172a}
+.action-meta{display:flex;gap:15px;flex-wrap:wrap;font-size:.82rem;color:var(--muted);margin-top:6px}
+.inline-input{width:70px;padding:4px 6px;border:1px solid var(--border);border-radius:4px;font-family:inherit;font-size:.85rem;text-align:center}
+.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,.6);z-index:1000;align-items:center;justify-content:center;padding:20px}
+.modal.active{display:flex}
+.modal-content{background:#fff;border-radius:14px;padding:25px;max-width:850px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg)}
+.modal-content h2{color:var(--primary-dark);margin-bottom:15px;border-bottom:1px solid var(--border);padding-bottom:8px}
+.form-group{margin-bottom:15px}
+.form-group label{display:block;margin-bottom:6px;font-weight:bold;font-size:.88rem;color:#334155}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:.9rem}
+.form-group textarea{min-height:80px;resize:vertical}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.close-btn{float:left;background:none;border:none;font-size:1.6rem;cursor:pointer;color:var(--muted)}
+.chart-container{position:relative;height:320px;margin:15px 0}
+.legend{display:flex;gap:15px;flex-wrap:wrap;margin:12px 0;font-size:.85rem}
+.legend-item{display:flex;align-items:center;gap:6px}
+.dot{width:12px;height:12px;border-radius:50%;display:inline-block}
+.dot.green-dark{background:var(--green-dark)}
+.dot.green-light{background:var(--green-light)}
+.dot.yellow{background:var(--yellow)}
+.dot.orange{background:var(--orange)}
+.dot.red{background:var(--red)}
+.scenario-selector{display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#f8fafc}
+.scenario-selector button{padding:6px 14px;border:none;background:transparent;cursor:pointer;font-family:inherit;font-size:.85rem;font-weight:600;color:var(--muted);transition:all .2s}
+.scenario-selector button.active{background:var(--primary);color:#fff}
+.alert-box{padding:12px 16px;border-radius:8px;font-size:.88rem;margin:12px 0;display:flex;align-items:center;gap:10px}
+.alert-info{background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a}
+.alert-warning{background:#fefce8;border:1px solid #fef08a;color:#854d0e}
+.small-help{font-size:.8rem;color:var(--muted);margin-top:6px}
+@media(max-width:768px){
+  .container{padding:10px}
+  .brand-title{font-size:1.2rem}
+  .pyramid-name{width:100%;margin-bottom:4px}
+  .pyramid-step{flex-direction:column;align-items:flex-start}
+  .form-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="brand-header">
+      <div class="brand-identity">
+        <div class="brand-mark" title="شورای عالی انقلاب فرهنگی">
+          <img src="./Logo-shora.png" alt="نشان شورای عالی انقلاب فرهنگی" onerror="this.outerHTML='<span style=\'font-size:30px\'>🏛️</span>'">
+        </div>
+        <div>
+          <h1 class="brand-title">🧠 داشبورد راهبری علوم و فناوری‌های شناختی ایران</h1>
+          <p class="brand-subtitle">ارزیابی سند راهبردی علوم و فناوری‌های شناختی (افق ۱۴۰۴)</p>
+        </div>
+      </div>
+      <div>
+        <div class="scenario-selector" id="scenarioSelector">
+          <button class="active" onclick="setScenario('equal')">سناریوی متوازن (۲۵٪)</button>
+          <button onclick="setScenario('specialized')">سناریوی تخصصی (۳۵-۳۰-۲۰-۱۵)</button>
+          <button onclick="setScenario('custom')">اوزان کاربر</button>
+        </div>
+      </div>
+    </div>
+    <div class="brand-credit">
+      <span>متولی راهبری: دبیرخانه شورای عالی انقلاب فرهنگی _ معاونت فناوری، نوآوری و اقتصاد دانش بنیان</span>
+      <span>مدل ریاضی: هرم جاری‌سازی استراتژیک + شبیه‌سازی مونت‌کارلو (ویرایش در ارائه)</span>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="overview">📊 نمای کلی و هرم علّی</button>
+    <button class="tab-btn" data-tab="vision">👁️ چشم‌انداز (۴ رکن)</button>
+    <button class="tab-btn" data-tab="goals">🎯 اهداف کلان (۷ هدف)</button>
+    <button class="tab-btn" data-tab="strategies">🗂️ راهبردهای کلان (۶ راهبرد)</button>
+    <button class="tab-btn" data-tab="actions">📋 اقدامات و شواهد تفکیکی (۱۷ اقدام)</button>
+    <button class="tab-btn" data-tab="montecarlo">🎲 شبیه‌سازی مونت‌کارلو و گزارش‌ها</button>
+  </nav>
+
+  <div id="toolbarWrap"></div>
+  <div id="app"></div>
+
+  <footer style="margin-top:30px;padding:16px;text-align:center;color:var(--muted);font-size:.82rem;border-top:1px solid var(--border)">
+    سامانه پایش و ارزیابی اسناد ملی علم، فناوری و نوآوری (STI) | طراحی مبتنی بر متدولوژی (AIE) | زمان ارزیابی: شهریور ۱۴۰۵ (ویرایش در ارائه)
+  </footer>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeModal()">×</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+let DATA = null;
+let DEFAULT_DATA = null;
+let currentTab = 'overview';
+let currentScenario = 'equal'; 
+let charts = {};
+// === کدهای جدید برای تنظیم فونت نمودارها ===
+Chart.defaults.font.family = "'Sahel', Tahoma, sans-serif";
+Chart.defaults.font.size = 13;
+Chart.defaults.color = '#334155'; // رنگ متن نمودارها
+const STATUS_RULES = [
+  {key:"completed", label:"تکمیل‌شده", color:"green-dark", min:90.0000001, score:100},
+  {key:"achieved", label:"دستاورد عینی", color:"green-light", min:70, maxInclusive:90, score:75},
+  {key:"initial_output", label:"خروجی اولیه", color:"yellow", min:50, maxExclusive:70, score:50},
+  {key:"initial", label:"فعالیت اولیه", color:"orange", min:10, maxExclusive:50, score:25},
+  {key:"neglected", label:"مغفول", color:"red", min:-Infinity, maxExclusive:10, score:0}
+];
+const STATUS_BY_KEY = Object.fromEntries(STATUS_RULES.map(x=>[x.key,x]));
+
+function esc(str){
+  return String(str ?? '').replace(/[&<>'"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+}
+function clamp(v, min=0, max=100){
+  const n = Number(v);
+  if(!Number.isFinite(n)) return min;
+  return Math.max(min, Math.min(max, n));
+}
+function classifyAchievement(v){
+  const n = clamp(v);
+  if(n > 90) return "completed";
+  if(n >= 70) return "achieved";
+  if(n >= 50) return "initial_output";
+  if(n >= 10) return "initial";
+  return "neglected";
+}
+
+function recalculateAction(a){
+  if(a.components && a.components.length > 0){
+    const totW = a.components.reduce((sum, c) => sum + (Number(c.weight) || 0), 0);
+    const weightedSum = a.components.reduce((sum, c) => {
+      const w = Number(c.weight) || 0;
+      const ach = clamp(c.achievement);
+      c.weightedScore = round(w * ach / (totW || 100), 2);
+      return sum + (w * ach);
+    }, 0);
+    a.achievement = round(totW > 0 ? weightedSum / totW : 0, 1);
+  }
+  a.status = classifyAchievement(a.achievement);
+}
+
+function recalculateAll(){
+  DATA.actions.forEach(recalculateAction);
+
+  DATA.strategies.forEach(s => {
+    const acts = DATA.actions.filter(a => s.linkedActionIds.includes(a.id));
+    if(acts.length > 0){
+      const sumW = acts.reduce((acc, a) => acc + (Number(a.weight) || 1), 0);
+      const sumScores = acts.reduce((acc, a) => acc + (clamp(a.achievement) * (Number(a.weight) || 1)), 0);
+      s.achievement = round(sumW > 0 ? sumScores / sumW : 0, 1);
+    }
+    s.status = classifyAchievement(s.achievement);
+  });
+
+  DATA.goals.forEach(g => {
+    if(g.components && g.components.length > 0){
+      const sumW = g.components.reduce((acc, c) => acc + (Number(c.weight) || 0), 0);
+      const sumScores = g.components.reduce((acc, c) => acc + (clamp(c.achievement) * (Number(c.weight) || 0)), 0);
+      g.achievement = round(sumW > 0 ? sumScores / sumW : 0, 1);
+    }
+    g.status = classifyAchievement(g.achievement);
+  });
+
+  DATA.vision.forEach(v => {
+    if(v.components && v.components.length > 0){
+      const sumW = v.components.reduce((acc, c) => acc + (Number(c.weight) || 0), 0);
+      const sumScores = v.components.reduce((acc, c) => acc + (clamp(c.achievement) * (Number(c.weight) || 0)), 0);
+      v.achievement = round(sumW > 0 ? sumScores / sumW : 0, 1);
+    }
+    v.status = classifyAchievement(v.achievement);
+  });
+}
+
+function round(val, dec=1){
+  const factor = Math.pow(10, dec);
+  return Math.round(val * factor) / factor;
+}
+
+function getVisionWeights(){
+  return DATA.vision.map(v => {
+    if(currentScenario === 'equal') return v.equalWeight;
+    if(currentScenario === 'specialized') return v.specializedWeight;
+    return v.userWeight ?? v.specializedWeight;
+  });
+}
+
+function calcTotalDocumentScore(){
+  const weights = getVisionWeights();
+  const totW = weights.reduce((a,b)=>a+b, 0);
+  const sumScores = DATA.vision.reduce((acc, v, idx) => acc + (v.achievement * weights[idx]), 0);
+  return totW > 0 ? round(sumScores / totW, 1) : 0;
+}
+
+function calcMean(arr, key='achievement'){
+  if(!arr.length) return 0;
+  return round(arr.reduce((acc, x) => acc + (Number(x[key]) || 0), 0) / arr.length, 1);
+}
+
+function setScenario(sc){
+  currentScenario = sc;
+  document.querySelectorAll('#scenarioSelector button').forEach((b, i) => {
+    b.classList.toggle('active', (sc === 'equal' && i===0) || (sc === 'specialized' && i===1) || (sc === 'custom' && i===2));
+  });
+  render();
+}
+
+function renderToolbar(){
+  return `<div class="toolbar">
+    <button class="btn btn-success" onclick="downloadJson()"><span style="font-size:1.1rem">⬇️</span> دانلود فایل پشتیبان (data.json)</button>
+    <label class="btn btn-secondary" style="margin:0;cursor:pointer">
+      <span>⬆️ بارگذاری فایل JSON</span>
+      <input type="file" accept=".json" style="display:none" onchange="uploadJson(event)">
+    </label>
+    <button class="btn btn-secondary" onclick="resetToDefault()">↩️ بازنشانی داده‌های پیش‌فرض گزارش رسمی</button>
+    <span style="flex:1"></span>
+    <span id="saveState" class="small-help">✓ داده‌ها فعال، فرمول‌ها برخط و پیوند سلسله‌مراتبی برقرار است.</span>
+  </div>`;
+}
+
+function render(){
+  recalculateAll();
+  destroyCharts();
+  const toolbar = document.getElementById('toolbarWrap');
+  if(toolbar) toolbar.innerHTML = renderToolbar();
+  const app = document.getElementById('app');
+  
+  if(currentTab === 'overview') app.innerHTML = renderOverview();
+  else if(currentTab === 'vision') app.innerHTML = renderVision();
+  else if(currentTab === 'goals') app.innerHTML = renderGoals();
+  else if(currentTab === 'strategies') app.innerHTML = renderStrategies();
+  else if(currentTab === 'actions') app.innerHTML = renderActions();
+  else if(currentTab === 'montecarlo') app.innerHTML = renderMonteCarlo();
+
+  attachTabEvents();
+  if(currentTab === 'overview') drawOverviewCharts();
+  if(currentTab === 'goals') drawGoalsChart();
+  if(currentTab === 'strategies') drawStrategiesChart();
+  if(currentTab === 'montecarlo') runMonteCarloSim();
+}
+
+function renderOverview(){
+  const totalDoc = calcTotalDocumentScore();
+  const meanActs = calcMean(DATA.actions);
+  const meanStrats = calcMean(DATA.strategies);
+  const meanGoals = calcMean(DATA.goals);
+  const meanVision = calcMean(DATA.vision);
+  
+  const scCounts = {completed:0, achieved:0, initial_output:0, initial:0, neglected:0};
+  DATA.actions.forEach(a => scCounts[a.status]++);
+
+  return `
+  <div class="stats-grid">
+    <div class="stat-box" style="border-right-color:#1e3a8a">
+      <div class="label">تحقق کل سند (هرم)</div>
+      <div class="value">${totalDoc}%</div>
+      <div class="subvalue">بازه ۹۰٪: [${currentScenario==='equal'?'۴۷.۱٪ تا ۵۳.۴٪':'۵۱.۲٪ تا ۵۷.۴٪'}]</div>
+    </div>
+    <div class="stat-box" style="border-right-color:#2563eb">
+      <div class="label">میانگین چشم‌انداز (Impact)</div>
+      <div class="value">${meanVision}%</div>
+      <div class="subvalue">۴ رکن کلان ماده ۴</div>
+    </div>
+    <div class="stat-box" style="border-right-color:#0284c7">
+      <div class="label">میانگین اهداف کلان (Outcomes)</div>
+      <div class="value">${meanGoals}%</div>
+      <div class="subvalue">۷ هدف کمی و کیفی ماده ۵</div>
+    </div>
+    <div class="stat-box" style="border-right-color:#0d9488">
+      <div class="label">میانگین راهبردها (Capabilities)</div>
+      <div class="value">${meanStrats}%</div>
+      <div class="subvalue">۶ راهبرد کلان ماده ۶</div>
+    </div>
+    <div class="stat-box" style="border-right-color:#10b981">
+      <div class="label">میانگین اقدامات (Outputs)</div>
+      <div class="value">${meanActs}%</div>
+      <div class="subvalue">۱۷ اقدام اجرایی ماده ۷</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;margin-bottom:20px">
+    <div class="card">
+      <h2>هرم علّی جاری‌سازی استراتژی و نشت کارایی (Efficiency Leakage)</h2>
+      <div class="alert-box alert-info">
+        <b>تحلیل:</b> میانگین پیشرفت اقدامات <b>${meanActs}٪</b> است، اما به دلیل اصطکاک‌های محیطی (تحریم، عدم پوشش بیمه و ضعف تجاری‌سازی صنعتی)، تحقق اهداف کلان به <b>${meanGoals}٪</b> و چشم‌انداز نهایی به <b>${totalDoc}٪</b> منتهی می‌شود.
+      </div>
+      <div class="pyramid-wrap">
+        <div class="pyramid-step">
+          <div class="pyramid-name">۱. برونداد اقدامات (Outputs)</div>
+          <div class="pyramid-bar"><div class="pyramid-fill" style="width:${meanActs}%;background:#10b981">${meanActs}%</div></div>
+          <div class="pyramid-val">${meanActs}%</div>
+        </div>
+        <div class="pyramid-step">
+          <div class="pyramid-name">۲. قابلیت‌های راهبردی (Capabilities)</div>
+          <div class="pyramid-bar"><div class="pyramid-fill" style="width:${meanStrats}%;background:#0d9488">${meanStrats}%</div></div>
+          <div class="pyramid-val">${meanStrats}%</div>
+        </div>
+        <div class="pyramid-step">
+          <div class="pyramid-name">۳. پیامد اهداف (Outcomes)</div>
+          <div class="pyramid-bar"><div class="pyramid-fill" style="width:${meanGoals}%;background:#0284c7">${meanGoals}%</div></div>
+          <div class="pyramid-val">${meanGoals}%</div>
+        </div>
+        <div class="pyramid-step">
+          <div class="pyramid-name">۴. اثر نهایی چشم‌انداز (Impact)</div>
+          <div class="pyramid-bar"><div class="pyramid-fill" style="width:${totalDoc}%;background:#1e3a8a">${totalDoc}%</div></div>
+          <div class="pyramid-val">${totalDoc}%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>توزیع وضعیت ۱۷ اقدام اجرایی</h2>
+      <div class="chart-container" style="height:230px"><canvas id="statusChart"></canvas></div>
+      <div class="legend" style="justify-content:center;margin-top:15px">
+        ${STATUS_RULES.map(r => `<div class="legend-item"><span class="dot ${r.color}"></span>${r.label}: <b>${scCounts[r.key]}</b></div>`).join('')}
+      </div>
+    </div>
+  </div>
+  `;
+}
+
+function renderVision(){
+  const weights = getVisionWeights();
+  return `
+  <div class="card">
+    <h2>
+      <span>ارزیابی چهار رکن چشم‌انداز سند (ماده ۴)</span>
+      <span class="small-help">سناریوی فعال: ${currentScenario==='equal'?'متوازن (۲۵٪ هر رکن)':currentScenario==='specialized'?'تخصصی علم و فناوری':'اوزان سفارشی'}</span>
+    </h2>
+    <div class="alert-box alert-info" style="display: block !important; text-align: justify; direction: rtl; column-count: 1 !important; flex-direction: column !important;">
+    <p style="margin: 0 0 10px 0; line-height: 1.8;">
+        چشم انداز سند: <strong>توسعه دانش و معرفت در زمینه علوم شناختی و فناوری های مربوط به آن</strong> بر اساس <strong>مبانی اسلامی</strong> برای <strong>شناخت و تعالی انسان</strong>، <strong>اقتدار ملی</strong>، <strong>تولید ثروت و رفاه اجتماعی</strong>، <strong>کسب جایگاه مناسب در جامعه جهانی</strong> به عنوان کشوری <strong>پیشرو، مرجع و تأثیرگذار، مولد و الهام بخش</strong> در تولید علوم و فناوری های شناختی و <strong>احراز رتبه اول در بین کشورهای اسلامی و کشورهای منطقه</strong> بر اساس اهداف علمی و فناوری <strong>سند چشم انداز ۱۴۰۴</strong> و <strong>نقشه جامع علمی کشور</strong>.
+    </p>
+    <small style="display: block; font-size: 0.85em; color: #555; line-height: 1.6;">
+        چشم‌انداز در افق ۱۴۰۴ تبیین‌کننده اثر کلان (Impact) اجرای سند است. برای هر رکن، مؤلفه‌ها و شواهد کمّی تفکیک شده‌اند و درصد تحقق بر مبنای برآورد کالیبره‌شده استخراج شده است.
+    </small>
+	</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr;gap:18px">
+    ${DATA.vision.map((v, idx) => {
+      const st = STATUS_BY_KEY[v.status];
+      return `
+      <div class="card" style="border-right:5px solid var(--${st.color})">
+        <div class="action-head">
+          <div>
+            <div class="action-title">رکن ${v.id}: ${esc(v.title)}</div>
+            <div class="action-meta">
+              <span>وزن در سناریو: <b>${weights[idx]}٪</b></span>
+              <span>بازه اطمینان ۹۰٪: <span class="ci-pill">[${v.ci[0]}٪ – ${v.ci[1]}٪]</span></span>
+              <span>تحلیل شواهد: ${esc(v.analysis)}</span>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="badge badge-${st.color}">${st.label}</span>
+            <span style="font-size:1.3rem;font-weight:bold;color:var(--primary-dark)">${v.achievement}%</span>
+            <button class="btn btn-secondary btn-sm" onclick="editVisionModal(${v.id})">✏️ ویرایش مؤلفه‌ها</button>
+          </div>
+        </div>
+
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th style="width:40%">مؤلفه مشاهده‌پذیر </th>
+              <th style="width:12%">وزن</th>
+              <th style="width:20%">تارگت / شاخص هدف</th>
+              <th style="width:18%">وضعیت در گزارش رسمی</th>
+              <th style="width:10%">درصد تحقق</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${v.components.map((c, cIdx) => `
+              <tr>
+                <td><b>${esc(c.name)}</b></td>
+                <td><input class="inline-input" type="number" min="0" max="100" value="${c.weight}" onchange="updateVisionComp(${v.id}, ${cIdx}, 'weight', this.value)">٪</td>
+                <td><span style="font-size:.82rem;color:var(--muted)">${esc(c.target)}</span></td>
+                <td><span style="font-size:.82rem">${esc(c.actual)}</span></td>
+                <td><input class="inline-input" type="number" min="0" max="100" value="${c.achievement}" onchange="updateVisionComp(${v.id}, ${cIdx}, 'achievement', this.value)">٪</td>
+              </tr>
+            `).join('')}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td>حاصل‌جمع وزنی رکن ${v.id}</td>
+              <td>${v.components.reduce((s,c)=>s+Number(c.weight),0)}٪</td>
+              <td colspan="2">میانه کالیبره‌شده با بازه ۹۰٪ [${v.ci[0]}٪ – ${v.ci[1]}٪]</td>
+              <td style="color:var(--primary-dark);font-size:1.05rem">${v.achievement}٪</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      `;
+    }).join('')}
+  </div>
+  `;
+}
+
+function renderGoals(){
+  return `
+  <div class="card">
+    <h2>نمودار میله‌ای مقایسه تارگت (۱۰۰٪) با عملکرد واقعی ۷ هدف کلان (ماده ۵)</h2>
+    <div class="chart-container"><canvas id="goalsChart"></canvas></div>
+  </div>
+
+  <div class="card">
+    <h2>
+      <span>جدول تفکیکی ارزیابی ۷ هدف کلان سند</span>
+      <button class="btn btn-primary btn-sm" onclick="addGoalModal()">➕ افزودن هدف جدید</button>
+    </h2>
+    <div style="display:grid;gap:16px">
+      ${DATA.goals.map(g => {
+        const st = STATUS_BY_KEY[g.status];
+        return `
+        <div class="action-card" style="border-right:5px solid var(--${st.color})">
+          <div class="action-head">
+            <div>
+              <div class="action-title">هدف ${g.id}: ${esc(g.title)}</div>
+              <div class="action-meta">
+                <span>وزن هدف: <b>${g.weight}٪</b></span>
+                <span>بازه اطمینان ۹۰٪: <span class="ci-pill">[${g.ci[0]}٪ – ${g.ci[1]}٪]</span></span>
+                <span>تارگت: ${esc(g.target)}</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span class="badge badge-${st.color}">${st.label}</span>
+              <span style="font-size:1.3rem;font-weight:bold;color:var(--primary-dark)">${g.achievement}%</span>
+              <button class="btn btn-secondary btn-sm" onclick="editGoalModal(${g.id})">✏️ ویرایش</button>
+            </div>
+          </div>
+          <div style="margin:8px 0;font-size:.85rem;color:#334155"><b>عملکرد واقعی رسمی:</b> ${esc(g.actual)}</div>
+          
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th style="width:38%">مؤلفه / شاخص شواهد</th>
+                <th style="width:12%">وزن</th>
+                <th style="width:22%">تارگت شاخص</th>
+                <th style="width:18%">وضعیت مشاهده‌شده</th>
+                <th style="width:10%">درصد تحقق</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${g.components.map((c, cIdx) => `
+                <tr>
+                  <td>${esc(c.name)}</td>
+                  <td><input class="inline-input" type="number" min="0" max="100" value="${c.weight}" onchange="updateGoalComp(${g.id}, ${cIdx}, 'weight', this.value)">٪</td>
+                  <td style="font-size:.82rem;color:var(--muted)">${esc(c.target)}</td>
+                  <td style="font-size:.82rem">${esc(c.actual)}</td>
+                  <td><input class="inline-input" type="number" min="0" max="100" value="${c.achievement}" onchange="updateGoalComp(${g.id}, ${cIdx}, 'achievement', this.value)">٪</td>
+                </tr>
+              `).join('')}
+            </tbody>
+            <tfoot>
+              <tr>
+                <td>حاصل‌جمع وزنی هدف ${g.id}</td>
+                <td>${g.components.reduce((s,c)=>s+Number(c.weight),0)}٪</td>
+                <td colspan="2">بازه ۹۰٪: [${g.ci[0]}٪ تا ${g.ci[1]}٪]</td>
+                <td style="color:var(--primary-dark);font-size:1.05rem">${g.achievement}٪</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        `;
+      }).join('')}
+    </div>
+  </div>
+  `;
+}
+
+function renderStrategies(){
+  return `
+  <div class="card">
+    <h2>ارزیابی ۶ راهبرد کلان سند (ماده ۶)</h2>
+    <div class="chart-container"><canvas id="strategiesChart"></canvas></div>
+  </div>
+
+  <div class="card">
+    <h2>فهرست راهبردها و اقدامات مرتبط</h2>
+    <div style="display:grid;gap:18px">
+      ${DATA.strategies.map(s => {
+        const st = STATUS_BY_KEY[s.status];
+        const linkedActs = DATA.actions.filter(a => s.linkedActionIds.includes(a.id));
+        return `
+        <div class="action-card" style="border-right:5px solid var(--${st.color})">
+          <div class="action-head">
+            <div>
+              <div class="action-title">راهبرد ${s.id}: ${esc(s.title)}</div>
+              <div class="action-meta">
+                <span>وزن راهبرد: <b>${s.weight}٪</b></span>
+                <span>بازه ۹۰٪: <span class="ci-pill">[${s.ci[0]}٪ – ${s.ci[1]}٪]</span></span>
+                <span>تعداد اقدامات متصل: <b>${linkedActs.length} اقدام</b></span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span class="badge badge-${st.color}">${st.label}</span>
+              <span style="font-size:1.3rem;font-weight:bold;color:var(--primary-dark)">${s.achievement}%</span>
+              <button class="btn btn-secondary btn-sm" onclick="editStrategyModal(${s.id})">✏️ ویرایش راهبرد</button>
+            </div>
+          </div>
+          <p style="font-size:.88rem;color:#334155;margin:8px 0">${esc(s.description)}</p>
+
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th style="width:10%">کد اقدام</th>
+                <th style="width:45%">عنوان اقدام متصل</th>
+                <th style="width:15%">دستگاه مسئول</th>
+                <th style="width:15%">دسته وضعیتی</th>
+                <th style="width:15%">درصد تحقق اقدام</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${linkedActs.map(a => {
+                const aSt = STATUS_BY_KEY[a.status];
+                return `
+                <tr>
+                  <td><b>${esc(a.key)}</b></td>
+                  <td>${esc(a.title)}</td>
+                  <td><span style="font-size:.8rem;color:var(--muted)">${esc(a.owner)}</span></td>
+                  <td><span class="badge badge-${aSt.color}">${aSt.label}</span></td>
+                  <td><b>${a.achievement}٪</b></td>
+                </tr>
+                `;
+              }).join('')}
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4">میانگین وزنی اقدامات این راهبرد</td>
+                <td style="color:var(--primary-dark);font-size:1.05rem">${s.achievement}٪</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        `;
+      }).join('')}
+    </div>
+  </div>
+  `;
+}
+
+function renderActions(){
+  return `
+  <div class="card">
+    <h2>فیلتر و جستجو در ۱۷ اقدام اجرایی سند (ماده ۷)</h2>
+    <div class="filters">
+      <input type="text" id="actionSearch" placeholder="جستجو در عنوان اقدام یا شواهد..." oninput="filterActionsView()">
+      <select id="actionStratFilter" onchange="filterActionsView()">
+        <option value="">همه راهبردها (۶ راهبرد)</option>
+        ${DATA.strategies.map(s => `<option value="${s.id}">راهبرد ${s.id}: ${esc(s.title)}</option>`).join('')}
+      </select>
+      <select id="actionStatusFilter" onchange="filterActionsView()">
+        <option value="">همه دسته‌ها (۵ وضعیت)</option>
+        ${STATUS_RULES.map(r => `<option value="${r.key}">${r.label}</option>`).join('')}
+      </select>
+      <input type="text" id="actionOwnerFilter" placeholder="دستگاه مسئول..." oninput="filterActionsView()">
+    </div>
+    <div class="small-help">
+      💡 <b>قابلیت ویژه ارزیابی پویا:</b> با تغییر هر یک از اوزان یا درصدهای تحقق در جدول مؤلفه‌های زیر، درصد نهایی اقدام و وضعیت آن بلافاصله بازمحاسبه شده و در تمام سطوح بالادستی (راهبرد، هدف، چشم‌انداز و هرم سند) اعمال می‌شود.
+    </div>
+  </div>
+
+  <div id="actionsContainer" style="display:grid;gap:20px">
+    ${DATA.actions.map(a => renderSingleActionCard(a)).join('')}
+  </div>
+  `;
+}
+
+function renderSingleActionCard(a){
+  const st = STATUS_BY_KEY[a.status];
+  const strat = DATA.strategies.find(s => s.id === a.strategyId);
+  return `
+  <div class="action-card" id="act-card-${a.id}" data-id="${a.id}" data-title="${esc(a.title).toLowerCase()}" data-strat="${a.strategyId}" data-status="${a.status}" data-owner="${esc(a.owner).toLowerCase()}" style="border-right:6px solid var(--${st.color})">
+    <div class="action-head">
+      <div style="flex:1">
+        <div class="action-title">
+          <span style="color:var(--primary)">${esc(a.key)}:</span> ${esc(a.title)}
+        </div>
+        <div class="action-meta">
+          <span>راهبرد مرتبط: <b>${strat ? esc(strat.title) : '—'}</b></span>
+          <span>دستگاه مسئول: <b>${esc(a.owner)}</b></span>
+          ${a.collaborators ? `<span>همکاران: ${esc(a.collaborators)}</span>` : ''}
+          <span>بازه ۹۰٪: <span class="ci-pill">[${a.ci[0]}٪ – ${a.ci[1]}٪]</span></span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="badge badge-${st.color}" id="act-badge-${a.id}">${st.label}</span>
+        <span style="font-size:1.4rem;font-weight:bold;color:var(--primary-dark)" id="act-score-${a.id}">${a.achievement}%</span>
+        <button class="btn btn-secondary btn-sm" onclick="editActionModal(${a.id})">✏️ ویرایش اقدام</button>
+      </div>
+    </div>
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th style="width:32%">مؤلفه مشاهده‌پذیر </th>
+          <th style="width:10%">وزن</th>
+          <th style="width:38%">وضعیت و شواهد عینی گزارش رسمی ستاد</th>
+          <th style="width:10%">تحقق</th>
+          <th style="width:10%">حاصل‌ضرب وزنی</th>
+        </tr>
+      </thead>
+      <tbody id="comp-rows-${a.id}">
+        ${a.components.map((c, cIdx) => `
+          <tr>
+            <td><b>${esc(c.name)}</b></td>
+            <td>
+              <input class="inline-input" type="number" min="0" max="100" step="1" value="${c.weight}" onchange="updateActionComp(${a.id}, ${cIdx}, 'weight', this.value)">٪
+            </td>
+            <td><span style="font-size:.82rem;color:#334155">${esc(c.evidence)}</span></td>
+            <td>
+              <input class="inline-input" type="number" min="0" max="100" step="1" value="${c.achievement}" onchange="updateActionComp(${a.id}, ${cIdx}, 'achievement', this.value)">٪
+            </td>
+            <td id="act-${a.id}-comp-${cIdx}-score"><b>${c.weightedScore}٪</b></td>
+          </tr>
+        `).join('')}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td>جمع کل مؤلفه‌های اقدام ${esc(a.key)}</td>
+          <td>${a.components.reduce((sum,c)=>sum+Number(c.weight),0)}٪</td>
+          <td>${esc(a.notes || a.description)}</td>
+          <td colspan="2" style="font-size:1.1rem;color:var(--primary-dark);font-weight:bold" id="act-foot-${a.id}">${a.achievement}٪</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  `;
+}
+
+function renderMonteCarlo(){
+  return `
+  <div class="card">
+    <h2>
+      <span>شبیه‌سازی مونت‌کارلو تحقق کل سند (۱۰۰,۰۰۰ تکرار بر پایه بازه‌های ۹۰٪)</span>
+      <button class="btn btn-primary btn-sm" onclick="runMonteCarloSim()">🔄 اجرای مجدد شبیه‌سازی</button>
+    </h2>
+    <div class="alert-box alert-info">
+      در این ماژول، توزیع‌های نرمال استاندارد کالیبره‌شده برای تک‌تک ارکان و اهداف بر اساس بازه‌های اطمینان ۹۰٪ نمونه‌برداری می‌شوند تا ارزش در معرض ریسک (VaR) و توزیع تجمیعی تحقق کل سند مشخص گردد.
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:20px 0">
+      <div class="stat-box"><div class="label">میانگین شبیه‌سازی</div><div class="value" id="mcMean">—</div></div>
+      <div class="stat-box"><div class="label">میانه شبیه‌سازی (P50)</div><div class="value" id="mcMedian">—</div></div>
+      <div class="stat-box"><div class="label">چارک ۵٪ (P5)</div><div class="value" id="mcP5">—</div></div>
+      <div class="stat-box"><div class="label">چارک ۹۵٪ (P95)</div><div class="value" id="mcP95">—</div></div>
+      <div class="stat-box"><div class="label">احتمال تحقق بالای ۵۰٪</div><div class="value" id="mcProb50">—</div></div>
+    </div>
+
+    <div class="chart-container"><canvas id="mcChart"></canvas></div>
+  </div>
+
+  <div class="card">
+    <h2>
+      <span>چالش‌های راهبردی و گلوگاه‌های احصاء‌شده (پیشنهادها برای موج دوم ۱۴۰۵–۱۴۲۰)</span>
+      <button class="btn btn-primary btn-sm" onclick="addChallengeModal()">➕ افزودن چالش جدید</button>
+    </h2>
+    <div style="display:grid;gap:14px">
+      ${DATA.challenges.map(c => `
+        <div style="border:1px solid var(--border);border-radius:10px;padding:16px;background:#f8fafc;position:relative;">
+          <button class="btn btn-secondary btn-sm" style="position:absolute;top:16px;left:16px;" onclick="editChallengeModal(${c.id})">✏️ ویرایش</button>
+          <div style="font-weight:bold;color:var(--primary-dark);font-size:1rem;margin-bottom:6px;padding-left:70px;">📌 چالش ${c.id}: ${esc(c.title)}</div>
+          <p style="font-size:.88rem;margin-bottom:8px"><b>شرح چالش در زیست‌بوم:</b> ${esc(c.description)}</p>
+          <p style="font-size:.88rem;color:#166534"><b>راهکار پیشنهادی موج دوم:</b> ${esc(c.suggestion)}</p>
+        </div>
+      `).join('')}
+    </div>
+  </div>
+  `;
+}
+
+function updateActionComp(actId, compIdx, field, val){
+  const a = DATA.actions.find(x => x.id === actId);
+  if(!a || !a.components[compIdx]) return;
+  a.components[compIdx][field] = Number(val) || 0;
+  recalculateAll();
+
+  const comp = a.components[compIdx];
+  const scoreCell = document.getElementById(`act-${actId}-comp-${compIdx}-score`);
+  if(scoreCell) scoreCell.innerHTML = `<b>${comp.weightedScore}٪</b>`;
+  const footCell = document.getElementById(`act-foot-${actId}`);
+  if(footCell) footCell.textContent = `${a.achievement}٪`;
+  const actScore = document.getElementById(`act-score-${actId}`);
+  if(actScore) actScore.textContent = `${a.achievement}%`;
+  const badge = document.getElementById(`act-badge-${actId}`);
+  const st = STATUS_BY_KEY[a.status];
+  if(badge){
+    badge.className = `badge badge-${st.color}`;
+    badge.textContent = st.label;
+  }
+  const card = document.getElementById(`act-card-${actId}`);
+  if(card) card.style.borderRight = `6px solid var(--${st.color})`;
+
+  showToast(`اقدام ${a.key} به‌روزرسانی شد: تحقق جدید ${a.achievement}٪`);
+}
+
+function updateGoalComp(goalId, compIdx, field, val){
+  const g = DATA.goals.find(x => x.id === goalId);
+  if(!g || !g.components[compIdx]) return;
+  g.components[compIdx][field] = Number(val) || 0;
+  recalculateAll();
+  render();
+  showToast(`هدف ${goalId} به‌روزرسانی شد: تحقق جدید ${g.achievement}٪`);
+}
+
+function updateVisionComp(visionId, compIdx, field, val){
+  const v = DATA.vision.find(x => x.id === visionId);
+  if(!v || !v.components[compIdx]) return;
+  v.components[compIdx][field] = Number(val) || 0;
+  recalculateAll();
+  render();
+  showToast(`رکن ${visionId} به‌روزرسانی شد: تحقق جدید ${v.achievement}٪`);
+}
+
+function filterActionsView(){
+  const search = (document.getElementById('actionSearch')?.value || '').toLowerCase().trim();
+  const strat = document.getElementById('actionStratFilter')?.value;
+  const status = document.getElementById('actionStatusFilter')?.value;
+  const owner = (document.getElementById('actionOwnerFilter')?.value || '').toLowerCase().trim();
+
+  document.querySelectorAll('#actionsContainer .action-card').forEach(card => {
+    const cardTitle = card.dataset.title || '';
+    const cardStrat = card.dataset.strat || '';
+    const cardStatus = card.dataset.status || '';
+    const cardOwner = card.dataset.owner || '';
+    const textContent = card.textContent.toLowerCase();
+
+    const matchSearch = !search || cardTitle.includes(search) || textContent.includes(search);
+    const matchStrat = !strat || cardStrat === strat;
+    const matchStatus = !status || cardStatus === status;
+    const matchOwner = !owner || cardOwner.includes(owner);
+
+    card.style.display = (matchSearch && matchStrat && matchStatus && matchOwner) ? 'block' : 'none';
+  });
+}
+
+function openModal(html){
+  document.getElementById('modalBody').innerHTML = html;
+  document.getElementById('modal').classList.add('active');
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('active');
+}
+document.getElementById('modal').onclick = e => { if(e.target.id === 'modal') closeModal(); };
+
+function editActionModal(id){
+  const a = DATA.actions.find(x => x.id === id);
+  if(!a) return;
+  openModal(`
+    <h2>ویرایش اقدام ${esc(a.key)}: ${esc(a.title)}</h2>
+    <div class="form-group"><label>عنوان کامل اقدام</label><input id="mA_title" value="${esc(a.title)}"></div>
+    <div class="form-row">
+      <div class="form-group"><label>دستگاه مسئول</label><input id="mA_owner" value="${esc(a.owner)}"></div>
+      <div class="form-group"><label>دستگاه‌های همکار</label><input id="mA_collab" value="${esc(a.collaborators)}"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>راهبرد کلان مرتبط</label>
+        <select id="mA_strat">
+          ${DATA.strategies.map(s => `<option value="${s.id}" ${s.id===a.strategyId?'selected':''}>راهبرد ${s.id}: ${esc(s.title)}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group"><label>وزن اقدام در راهبرد</label><input type="number" id="mA_weight" value="${a.weight}" step="0.1"></div>
+    </div>
+    <div class="form-group"><label>توضیحات و شواهد کلی</label><textarea id="mA_desc">${esc(a.description)}</textarea></div>
+    <div class="form-group"><label>یادداشت‌های ارزیابی / ارجاع به اسناد</label><textarea id="mA_notes">${esc(a.notes)}</textarea></div>
+    <button class="btn btn-primary" onclick="saveActionModal(${a.id})">💾 ذخیره تغییرات</button>
+  `);
+}
+
+function saveActionModal(id){
+  const a = DATA.actions.find(x => x.id === id);
+  if(!a) return;
+  a.title = document.getElementById('mA_title').value.trim() || a.title;
+  a.owner = document.getElementById('mA_owner').value.trim() || a.owner;
+  a.collaborators = document.getElementById('mA_collab').value.trim();
+  a.strategyId = Number(document.getElementById('mA_strat').value);
+  a.weight = Number(document.getElementById('mA_weight').value) || 1.0;
+  a.description = document.getElementById('mA_desc').value;
+  a.notes = document.getElementById('mA_notes').value;
+  closeModal();
+  render();
+  showToast('تغییرات اقدام با موفقیت ذخیره شد.');
+}
+
+function editStrategyModal(id){
+  const s = DATA.strategies.find(x => x.id === id);
+  if(!s) return;
+  openModal(`
+    <h2>ویرایش راهبرد ${s.id}: ${esc(s.title)}</h2>
+    <div class="form-group"><label>عنوان راهبرد</label><input id="mS_title" value="${esc(s.title)}"></div>
+    <div class="form-group"><label>وزن راهبرد در کل سند</label><input type="number" id="mS_weight" value="${s.weight}" step="0.1"></div>
+    <div class="form-group"><label>شرح راهبرد</label><textarea id="mS_desc">${esc(s.description)}</textarea></div>
+    <button class="btn btn-primary" onclick="saveStrategyModal(${s.id})">💾 ذخیره تغییرات</button>
+  `);
+}
+
+function saveStrategyModal(id){
+  const s = DATA.strategies.find(x => x.id === id);
+  if(!s) return;
+  s.title = document.getElementById('mS_title').value.trim() || s.title;
+  s.weight = Number(document.getElementById('mS_weight').value) || s.weight;
+  s.description = document.getElementById('mS_desc').value;
+  closeModal();
+  render();
+  showToast('راهبرد به‌روزرسانی شد.');
+}
+
+function editGoalModal(id){
+  const g = DATA.goals.find(x => x.id === id);
+  if(!g) return;
+  openModal(`
+    <h2>ویرایش هدف کلان ${g.id}: ${esc(g.title)}</h2>
+    <div class="form-group"><label>عنوان هدف</label><input id="mG_title" value="${esc(g.title)}"></div>
+    <div class="form-group"><label>تارگت و شاخص هدف‌گذاری‌شده</label><textarea id="mG_target">${esc(g.target)}</textarea></div>
+    <div class="form-group"><label>شرح عملکرد واقعی بر پایه شواهد</label><textarea id="mG_actual">${esc(g.actual)}</textarea></div>
+    <button class="btn btn-primary" onclick="saveGoalModal(${g.id})">💾 ذخیره هدف</button>
+  `);
+}
+
+function saveGoalModal(id){
+  const g = DATA.goals.find(x => x.id === id);
+  if(!g) return;
+  g.title = document.getElementById('mG_title').value.trim() || g.title;
+  g.target = document.getElementById('mG_target').value;
+  g.actual = document.getElementById('mG_actual').value;
+  closeModal();
+  render();
+  showToast('هدف کلان به‌روزرسانی شد.');
+}
+
+/* --- توابع جدید اضافه‌شده برای چشم‌انداز، اهداف جدید و چالش‌ها --- */
+
+/* ==========================================
+   ۱. توابع پیشرفته مدیریت چشم‌انداز (Vision)
+========================================== */
+function editVisionModal(id){
+  const v = DATA.vision.find(x => x.id === id);
+  if(!v) return;
+  
+  let compsHtml = (v.components || []).map((c, idx) => `
+    <div class="action-card" style="margin-bottom:15px; padding:15px; background:#f1f5f9; border:1px solid #cbd5e1;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <b style="color:var(--primary-dark)">مؤلفه ${idx + 1}</b>
+        <button class="btn btn-danger btn-sm" onclick="removeVisionComp(${v.id}, ${idx})">🗑️ حذف</button>
+      </div>
+      <div class="form-group"><label>نام مؤلفه</label><input id="mV_cName_${idx}" value="${esc(c.name)}"></div>
+      <div class="form-row">
+        <div class="form-group"><label>تارگت / شاخص هدف</label><input id="mV_cTarget_${idx}" value="${esc(c.target)}"></div>
+        <div class="form-group"><label>وضعیت در گزارش رسمی</label><input id="mV_cActual_${idx}" value="${esc(c.actual)}"></div>
+      </div>
+      <div class="form-row">
+         <div class="form-group"><label>وزن (٪)</label><input type="number" id="mV_cWeight_${idx}" value="${c.weight}"></div>
+         <div class="form-group"><label>درصد تحقق (٪)</label><input type="number" id="mV_cAch_${idx}" value="${c.achievement}"></div>
+      </div>
+    </div>
+  `).join('');
+
+  openModal(`
+    <h2>ویرایش رکن ${v.id}: ${esc(v.title)}</h2>
+    <div class="form-group"><label>عنوان رکن</label><input id="mV_title" value="${esc(v.title)}"></div>
+    <div class="form-group"><label>تحلیل شواهد</label><textarea id="mV_analysis">${esc(v.analysis)}</textarea></div>
+    
+    <hr style="margin:25px 0 15px 0; border:0; border-top:2px dashed var(--border);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+      <h3 style="margin:0; color:var(--primary-dark)">مدیریت مؤلفه‌های این رکن</h3>
+      <button class="btn btn-success btn-sm" onclick="addVisionComp(${v.id})">➕ افزودن مؤلفه جدید</button>
+    </div>
+    
+    <div id="mV_components_container" style="max-height:45vh; overflow-y:auto; padding-left:10px; padding-right:5px;">
+      ${compsHtml || '<div style="color:var(--muted); text-align:center;">مؤلفه‌ای وجود ندارد.</div>'}
+    </div>
+
+    <div style="margin-top:25px; text-align:left; border-top:1px solid var(--border); padding-top:15px;">
+        <button class="btn btn-primary" style="font-size:1.05rem; padding:10px 24px;" onclick="saveVisionModal(${v.id})">💾 ذخیره کل تغییرات رکن</button>
+    </div>
+  `);
+}
+
+function saveVisionModalState(id) {
+   const v = DATA.vision.find(x => x.id === id);
+   if(!v) return;
+   v.title = document.getElementById('mV_title').value.trim();
+   v.analysis = document.getElementById('mV_analysis').value;
+   
+   (v.components || []).forEach((c, idx) => {
+       const nameEl = document.getElementById(`mV_cName_${idx}`);
+       const targetEl = document.getElementById(`mV_cTarget_${idx}`);
+       const actualEl = document.getElementById(`mV_cActual_${idx}`);
+       const weightEl = document.getElementById(`mV_cWeight_${idx}`);
+       const achEl = document.getElementById(`mV_cAch_${idx}`);
+       
+       if(nameEl) c.name = nameEl.value.trim();
+       if(targetEl) c.target = targetEl.value.trim();
+       if(actualEl) c.actual = actualEl.value.trim();
+       if(weightEl) c.weight = Number(weightEl.value) || 0;
+       if(achEl) c.achievement = Number(achEl.value) || 0;
+   });
+}
+
+function addVisionComp(id) {
+   saveVisionModalState(id); // ذخیره مقادیر فعلی فرم
+   const v = DATA.vision.find(x => x.id === id);
+   if(v) {
+       if(!v.components) v.components = [];
+       v.components.push({ name: "", weight: 10, target: "", actual: "", achievement: 0 });
+       editVisionModal(id); // بازنشانی پنجره با ردیف جدید
+   }
+}
+
+function removeVisionComp(id, idx) {
+    if(!confirm("آیا از حذف این مؤلفه اطمینان دارید؟")) return;
+    saveVisionModalState(id);
+    const v = DATA.vision.find(x => x.id === id);
+    if(v && v.components) {
+        v.components.splice(idx, 1);
+        editVisionModal(id);
+    }
+}
+
+function saveVisionModal(id){
+  saveVisionModalState(id);
+  closeModal();
+  recalculateAll(); 
+  render();
+  showToast('رکن چشم‌انداز و مؤلفه‌های آن به‌روزرسانی شد.');
+}
+
+
+/* ==========================================
+   ۲. توابع پیشرفته مدیریت اهداف (Goals)
+========================================== */
+function editGoalModal(id){
+  const g = DATA.goals.find(x => x.id === id);
+  if(!g) return;
+  
+  let compsHtml = (g.components || []).map((c, idx) => `
+    <div class="action-card" style="margin-bottom:15px; padding:15px; background:#f1f5f9; border:1px solid #cbd5e1;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <b style="color:var(--primary-dark)">شاخص ${idx + 1}</b>
+        <button class="btn btn-danger btn-sm" onclick="removeGoalComp(${g.id}, ${idx})">🗑️ حذف</button>
+      </div>
+      <div class="form-group"><label>نام شاخص / مؤلفه</label><input id="mG_cName_${idx}" value="${esc(c.name)}"></div>
+      <div class="form-row">
+        <div class="form-group"><label>تارگت شاخص</label><input id="mG_cTarget_${idx}" value="${esc(c.target)}"></div>
+        <div class="form-group"><label>وضعیت مشاهده‌شده</label><input id="mG_cActual_${idx}" value="${esc(c.actual)}"></div>
+      </div>
+      <div class="form-row">
+         <div class="form-group"><label>وزن (٪)</label><input type="number" id="mG_cWeight_${idx}" value="${c.weight}"></div>
+         <div class="form-group"><label>درصد تحقق (٪)</label><input type="number" id="mG_cAch_${idx}" value="${c.achievement}"></div>
+      </div>
+    </div>
+  `).join('');
+
+  openModal(`
+    <h2>ویرایش هدف کلان ${g.id}: ${esc(g.title)}</h2>
+    <div class="form-group"><label>عنوان هدف</label><input id="mG_title" value="${esc(g.title)}"></div>
+    <div class="form-group"><label>تارگت هدف‌گذاری‌شده کلان</label><textarea id="mG_target">${esc(g.target)}</textarea></div>
+    <div class="form-group"><label>عملکرد واقعی کلان</label><textarea id="mG_actual">${esc(g.actual)}</textarea></div>
+    
+    <hr style="margin:25px 0 15px 0; border:0; border-top:2px dashed var(--border);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+      <h3 style="margin:0; color:var(--primary-dark)">مدیریت شاخص‌های این هدف</h3>
+      <button class="btn btn-success btn-sm" onclick="addGoalComp(${g.id})">➕ افزودن شاخص جدید</button>
+    </div>
+    
+    <div id="mG_components_container" style="max-height:45vh; overflow-y:auto; padding-left:10px; padding-right:5px;">
+      ${compsHtml || '<div style="color:var(--muted); text-align:center;">شاخصی وجود ندارد.</div>'}
+    </div>
+
+    <div style="margin-top:25px; text-align:left; border-top:1px solid var(--border); padding-top:15px;">
+      <button class="btn btn-primary" style="font-size:1.05rem; padding:10px 24px;" onclick="saveGoalModal(${g.id})">💾 ذخیره کل هدف</button>
+    </div>
+  `);
+}
+
+function saveGoalModalState(id) {
+   const g = DATA.goals.find(x => x.id === id);
+   if(!g) return;
+   g.title = document.getElementById('mG_title').value.trim();
+   g.target = document.getElementById('mG_target').value;
+   g.actual = document.getElementById('mG_actual').value;
+   
+   (g.components || []).forEach((c, idx) => {
+       const nameEl = document.getElementById(`mG_cName_${idx}`);
+       const targetEl = document.getElementById(`mG_cTarget_${idx}`);
+       const actualEl = document.getElementById(`mG_cActual_${idx}`);
+       const weightEl = document.getElementById(`mG_cWeight_${idx}`);
+       const achEl = document.getElementById(`mG_cAch_${idx}`);
+       
+       if(nameEl) c.name = nameEl.value.trim();
+       if(targetEl) c.target = targetEl.value.trim();
+       if(actualEl) c.actual = actualEl.value.trim();
+       if(weightEl) c.weight = Number(weightEl.value) || 0;
+       if(achEl) c.achievement = Number(achEl.value) || 0;
+   });
+}
+
+function addGoalComp(id) {
+   saveGoalModalState(id);
+   const g = DATA.goals.find(x => x.id === id);
+   if(g) {
+       if(!g.components) g.components = [];
+       g.components.push({ name: "", weight: 10, target: "", actual: "", achievement: 0 });
+       editGoalModal(id);
+   }
+}
+
+function removeGoalComp(id, idx) {
+    if(!confirm("آیا از حذف این شاخص اطمینان دارید؟")) return;
+    saveGoalModalState(id);
+    const g = DATA.goals.find(x => x.id === id);
+    if(g && g.components) {
+        g.components.splice(idx, 1);
+        editGoalModal(id);
+    }
+}
+
+function saveGoalModal(id){
+  saveGoalModalState(id);
+  closeModal();
+  recalculateAll(); 
+  render();
+  showToast('هدف کلان و شاخص‌های آن به‌روزرسانی شد.');
+}
+
+function editChallengeModal(id){
+  const c = DATA.challenges.find(x => x.id === id);
+  if(!c) return;
+  openModal(`
+    <h2>ویرایش چالش ${c.id}</h2>
+    <div class="form-group"><label>عنوان چالش</label><input id="mC_title" value="${esc(c.title)}"></div>
+    <div class="form-group"><label>شرح چالش</label><textarea id="mC_desc">${esc(c.description)}</textarea></div>
+    <div class="form-group"><label>راهکار پیشنهادی</label><textarea id="mC_sugg">${esc(c.suggestion)}</textarea></div>
+    <button class="btn btn-primary" onclick="saveChallengeModal(${c.id})">💾 ذخیره تغییرات</button>
+  `);
+}
+
+function saveChallengeModal(id){
+  const c = DATA.challenges.find(x => x.id === id);
+  if(!c) return;
+  c.title = document.getElementById('mC_title').value.trim() || c.title;
+  c.description = document.getElementById('mC_desc').value;
+  c.suggestion = document.getElementById('mC_sugg').value;
+  closeModal();
+  render();
+  showToast('چالش به‌روزرسانی شد.');
+}
+
+function addChallengeModal(){
+  openModal(`
+    <h2>افزودن چالش جدید</h2>
+    <div class="form-group"><label>عنوان چالش</label><input id="mC_new_title" placeholder="عنوان چالش..."></div>
+    <div class="form-group"><label>شرح چالش</label><textarea id="mC_new_desc"></textarea></div>
+    <div class="form-group"><label>راهکار پیشنهادی</label><textarea id="mC_new_sugg"></textarea></div>
+    <button class="btn btn-success" onclick="saveNewChallenge()">💾 ثبت چالش</button>
+  `);
+}
+
+function saveNewChallenge(){
+  const title = document.getElementById('mC_new_title').value.trim();
+  if(!title) { alert('عنوان الزامی است.'); return; }
+  const newId = DATA.challenges.length ? Math.max(...DATA.challenges.map(c => c.id)) + 1 : 1;
+  DATA.challenges.push({
+    id: newId,
+    title: title,
+    description: document.getElementById('mC_new_desc').value,
+    suggestion: document.getElementById('mC_new_sugg').value
+  });
+  closeModal();
+  render();
+  showToast('چالش جدید اضافه شد.');
+}
+
+/* --- پایان توابع اضافه‌شده --- */
+
+function showToast(msg){
+  const el = document.getElementById('saveState');
+  if(el){
+    el.innerHTML = `<b>✓ ${esc(msg)}</b>`;
+    el.style.color = '#15803d';
+    setTimeout(() => {
+      el.textContent = '✓ داده‌ها فعال، فرمول‌ها برخط و پیوند سلسله‌مراتبی برقرار است.';
+      el.style.color = '';
+    }, 4000);
+  }
+}
+
+function downloadJson(){
+  const blob = new Blob([JSON.stringify(DATA, null, 2)], {type:'application/json;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'cognitive_evaluation_data.json';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+function uploadJson(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try{
+      const parsed = JSON.parse(e.target.result);
+      if(parsed.actions && parsed.strategies && parsed.goals && parsed.vision){
+        DATA = parsed;
+        render();
+        alert('فایل JSON با موفقیت بارگذاری و داشبورد به‌روزرسانی شد.');
+      } else {
+        alert('ساختار فایل JSON معتبر نیست.');
+      }
+    }catch(err){
+      alert('خطا در خواندن فایل JSON: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function resetToDefault(){
+  if(!confirm('همه تغییرات بازنشانی شده و داده‌های پیش‌فرض گزارش رسمی بارگذاری شوند؟')) return;
+  DATA = JSON.parse(JSON.stringify(DEFAULT_DATA));
+  render();
+  alert('داده‌ها به حالت اولیه گزارش رسمی بازگردانده شدند.');
+}
+
+function destroyCharts(){
+  Object.values(charts).forEach(c => c?.destroy());
+  charts = {};
+}
+
+function drawOverviewCharts(){
+  const ctx = document.getElementById('statusChart');
+  if(!ctx) return;
+  const scCounts = {completed:0, achieved:0, initial_output:0, initial:0, neglected:0};
+  DATA.actions.forEach(a => scCounts[a.status]++);
+
+  charts.status = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: STATUS_RULES.map(r => r.label),
+      datasets: [{
+        data: STATUS_RULES.map(r => scCounts[r.key]),
+        backgroundColor: ['#15803d', '#16a34a', '#ca8a04', '#ea580c', '#dc2626']
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { rtl: true, textDirection: 'rtl' }
+      }
+    }
+  });
+}
+
+function drawGoalsChart(){
+  const ctx = document.getElementById('goalsChart');
+  if(!ctx) return;
+  charts.goals = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: DATA.goals.map(g => 'هدف ' + g.id),
+      datasets: [
+        {
+          label: 'تارگت هدف‌گذاری‌شده سند (۱۰۰٪)',
+          data: DATA.goals.map(() => 100),
+          backgroundColor: '#e2e8f0',
+          borderRadius: 4
+        },
+        {
+          label: 'درصد تحقق عملکردی',
+          data: DATA.goals.map(g => g.achievement),
+          backgroundColor: DATA.goals.map(g => g.achievement > 90 ? '#15803d' : g.achievement >= 70 ? '#16a34a' : g.achievement >= 50 ? '#ca8a04' : g.achievement >= 10 ? '#ea580c' : '#dc2626'),
+          borderRadius: 4
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: { max: 100, ticks: { callback: v => v + '٪' } }
+      },
+      plugins: {
+        legend: { position: 'top', rtl: true, textDirection: 'rtl' },
+        tooltip: { rtl: true, textDirection: 'rtl' }
+      }
+    }
+  });
+}
+
+function drawStrategiesChart(){
+  const ctx = document.getElementById('strategiesChart');
+  if(!ctx) return;
+  charts.strats = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: DATA.strategies.map(s => 'راهبرد ' + s.id),
+      datasets: [{
+        label: 'درصد تحقق راهبرد',
+        data: DATA.strategies.map(s => s.achievement),
+        backgroundColor: DATA.strategies.map(s => s.achievement > 90 ? '#15803d' : s.achievement >= 70 ? '#16a34a' : s.achievement >= 50 ? '#ca8a04' : s.achievement >= 10 ? '#ea580c' : '#dc2626'),
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: { max: 100, ticks: { callback: v => v + '٪' } }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: { rtl: true, textDirection: 'rtl' }
+      }
+    }
+  });
+}
+
+function runMonteCarloSim(){
+  const nSims = 20000;
+  const weights = getVisionWeights();
+  const totW = weights.reduce((a,b)=>a+b, 0);
+
+  function randn(){
+    let u=0, v=0;
+    while(u===0) u=Math.random();
+    while(v===0) v=Math.random();
+    return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+  }
+
+  const results = new Float64Array(nSims);
+  for(let i=0; i<nSims; i++){
+    let score = 0;
+    DATA.vision.forEach((v, idx) => {
+      const sigma = Math.max(1, (v.ci[1] - v.ci[0]) / 3.29);
+      const sampled = clamp(v.achievement + randn() * sigma);
+      score += sampled * weights[idx];
+    });
+    results[i] = clamp(score / totW);
+  }
+
+  results.sort();
+  const mean = round(results.reduce((a,b)=>a+b,0) / nSims, 1);
+  const median = round(results[Math.floor(nSims * 0.5)], 1);
+  const p5 = round(results[Math.floor(nSims * 0.05)], 1);
+  const p95 = round(results[Math.floor(nSims * 0.95)], 1);
+  const countOver50 = results.filter(x => x >= 50).length;
+  const prob50 = round((countOver50 / nSims) * 100, 1);
+
+  document.getElementById('mcMean').textContent = mean + '٪';
+  document.getElementById('mcMedian').textContent = median + '٪';
+  document.getElementById('mcP5').textContent = p5 + '٪';
+  document.getElementById('mcP95').textContent = p95 + '٪';
+  document.getElementById('mcProb50').textContent = prob50 + '٪';
+
+  const bins = 30;
+  const minBin = 35, maxBin = 75;
+  const step = (maxBin - minBin) / bins;
+  const hist = new Array(bins).fill(0);
+  const labels = [];
+  for(let b=0; b<bins; b++){
+    labels.push((minBin + b*step).toFixed(0) + '٪');
+  }
+  for(let i=0; i<nSims; i++){
+    const b = Math.floor((results[i] - minBin) / step);
+    if(b >= 0 && b < bins) hist[b]++;
+  }
+
+  const ctx = document.getElementById('mcChart');
+  if(!ctx) return;
+  if(charts.mc) charts.mc.destroy();
+  charts.mc = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'فراوانی سناریوها در شبیه‌سازی',
+        data: hist,
+        backgroundColor: '#2563eb',
+        borderRadius: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { title: { display: true, text: 'درصد تحقق کل سند' } },
+        y: { title: { display: true, text: 'تعداد تکرارها' } }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: { rtl: true, textDirection: 'rtl' }
+      }
+    }
+  });
+}
+
+function attachTabEvents(){
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentTab = btn.dataset.tab;
+      render();
+    };
+  });
+}
+
+async function boot(){
+  try{
+    const res = await fetch('./data.json', {cache:'no-store'});
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    DATA = await res.json();
+    DEFAULT_DATA = JSON.parse(JSON.stringify(DATA));
+  }catch(err){
+    console.error(err);
+    document.getElementById('app').innerHTML = `
+      <div class="card" style="border:1px solid #f87171;background:#fef2f2;color:#991b1b;padding:25px;text-align:center">
+        <h3>خطا در بارگذاری data.json</h3>
+        <p>مطمئن شوید فایل data.json در کنار index.html قرار دارد و از طریق وب‌سرور محلی (مانند python -m http.server) اجرا شده است.</p>
+      </div>
+    `;
+    return;
+  }
+  render();
+}
+boot();
+</script>
+</body>
+</html>
