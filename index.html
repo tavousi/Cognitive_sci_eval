@@ -159,10 +159,10 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
   <nav class="tabs">
     <button class="tab-btn" data-tab="overview">📊 نمای کلی و هرم علّی</button>
     <button class="tab-btn" data-tab="vision">👁️ چشم‌انداز (۴ رکن)</button>
-    <button class="tab-btn active" data-tab="goals">🎯 اهداف کلان (۷ هدف)</button>
+    <button class="tab-btn" data-tab="goals">🎯 اهداف کلان (۷ هدف)</button>
     <button class="tab-btn" data-tab="strategies">🗂️ راهبردهای کلان (۶ راهبرد)</button>
     <button class="tab-btn" data-tab="actions">📋 اقدامات و شواهد تفکیکی (۱۷ اقدام)</button>
-    <button class="tab-btn" data-tab="montecarlo">🎲 شبیه‌سازی مونت‌کارلو و گزارش‌ها</button>
+    <button class="tab-btn active" data-tab="montecarlo">🎲 شبیه‌سازی و چالش‌های راهبردی</button>
   </nav>
 
   <div id="toolbarWrap"><div class="toolbar">
@@ -176,523 +176,78 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
     <button class="btn btn-outline btn-sm" onclick="editCustomWeightsModal()">⚖️ تنظیم اوزان کاربر</button>
     <button class="btn btn-outline btn-sm" onclick="clearLocalChanges()">🧹 حذف نسخه محلی</button>
     <span style="flex:1"></span>
-    <span id="saveState" class="save-state dirty"><span>●</span> تغییرات جاری</span>
+    <span id="saveState" class="save-state dirty" style="">✓ داده‌ها فعال، فرمول‌ها برخط و پیوند سلسله‌مراتبی برقرار است.</span>
   </div></div>
   <div id="app">
   <div class="card">
-    <h2>نمودار میله‌ای مقایسه تارگت (۱۰۰٪) با عملکرد واقعی ۷ هدف کلان (ماده ۵)</h2>
-    <div class="small-help" style="margin-bottom:8px">عنوان کوتاه هر هدف در زیر میله آن درج شده است. بازه عدم‌قطعیت ۹۰٪ِ هر هدف به‌صورت برخط از پراکندگی وزنی شاخص‌ها و «اندازه نمونه مؤثر» محاسبه می‌شود (برآورد ± ۱٫۶۴۵ خطای معیار وزنی).</div>
-    <div class="chart-container"><canvas id="goalsChart" width="1693" height="400" style="display: block; box-sizing: border-box; height: 320px; width: 1354px; direction: rtl !important;"></canvas></div>
+    <h2>
+      <span>شبیه‌سازی مونت‌کارلو تحقق کل سند (۲۰,۰۰۰ تکرار بر پایه بازه‌های عدم‌قطعیت ۹۰٪)</span>
+      <button class="btn btn-primary btn-sm" onclick="runMonteCarloSim()">🔄 اجرای مجدد شبیه‌سازی</button>
+    </h2>
+    <div class="alert-box alert-info">
+      در این ماژول، بازه عدم‌قطعیت ۹۰٪ هر رکن به‌صورت برخط از پراکندگی وزنی مؤلفه‌های شواهد (با لحاظ اندازه نمونه مؤثر) محاسبه و سپس به انحراف معیار متناظر تبدیل می‌شود؛ سپس توزیع‌های نرمال کالیبره‌شده نمونه‌برداری می‌شوند تا ارزش در معرض ریسک (VaR) و توزیع تجمیعی تحقق کل سند مشخص گردد.
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:20px 0">
+      <div class="stat-box"><div class="label">میانگین شبیه‌سازی</div><div class="value" id="mcMean">61.1٪</div></div>
+      <div class="stat-box"><div class="label">میانه شبیه‌سازی (P50)</div><div class="value" id="mcMedian">61.1٪</div></div>
+      <div class="stat-box"><div class="label">چارک ۵٪ (P5)</div><div class="value" id="mcP5">57.6٪</div></div>
+      <div class="stat-box"><div class="label">چارک ۹۵٪ (P95)</div><div class="value" id="mcP95">64.6٪</div></div>
+      <div class="stat-box"><div class="label">احتمال تحقق بالای ۵۰٪</div><div class="value" id="mcProb50">100٪</div></div>
+    </div>
+
+    <div class="chart-container"><canvas id="mcChart" width="1693" height="400" style="display: block; box-sizing: border-box; height: 320px; width: 1354px; direction: rtl !important;"></canvas></div>
   </div>
 
   <div class="card">
     <h2>
-      <span>جدول تفکیکی ارزیابی ۷ هدف کلان سند</span>
+      <span>چالش‌های راهبردی و گلوگاه‌های احصاء‌شده (پیشنهادها برای موج دوم ۱۴۰۵–۱۴۲۰)</span>
+      <button class="btn btn-primary btn-sm" onclick="addChallengeModal()">➕ افزودن چالش جدید</button>
     </h2>
-    <div style="display:grid;gap:16px">
+    <div style="display:grid;gap:14px">
       
-        <div class="action-card" style="border-right:5px solid var(--yellow)">
-          <div class="action-head">
-            <div>
-              <div class="action-title">هدف 1: نظریه‌پردازی علمی بر اساس انسان‌شناسی اسلام</div>
-              <div class="action-meta">
-                <span>وزن هدف: <b>14.3٪</b></span>
-                <span>بازه عدم‌قطعیت ۹۰٪: <span class="ci-pill">[54٪ – 70٪]</span></span>
-                <span>تارگت: تولید مدل‌های علمی آزمون‌پذیر مسلط بر پایه انسان‌شناسی اسلامی</span>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px">
-              <span class="badge badge-yellow">خروجی اولیه</span>
-              <span style="font-size:1.3rem;font-weight:bold;color:var(--primary-dark)">62%</span>
-              <button class="btn btn-secondary btn-sm" onclick="editGoalModal(1)">✏️ ویرایش</button>
-            </div>
-          </div>
-          <div style="margin:8px 0;font-size:.85rem;color:#334155"><b>عملکرد واقعی رسمی:</b> واژه‌گزینی ۱۳۰۶ واژه، بازنگری کتب و ایجاد رشته فلسفه ذهن؛ فقدان مدل تجربی آزمون‌پذیر</div>
-          
-          <table class="custom-table">
-            <thead>
-              <tr>
-                <th style="width:38%">مؤلفه / شاخص شواهد</th>
-                <th style="width:12%">وزن</th>
-                <th style="width:22%">تارگت شاخص</th>
-                <th style="width:18%">وضعیت مشاهده‌شده</th>
-                <th style="width:10%">درصد تحقق</th>
-              </tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>واژه‌گزینی تخصصی و ترمینولوژی اسلامی</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="35" onchange="updateGoalComp(1, 0, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">فرهنگ جامع علوم شناختی</td>
-                  <td style="font-size:.82rem">۱۳۰۶ واژه مصوب با فرهنگستان</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="90" onchange="updateGoalComp(1, 0, 'achievement', this.value)">٪</td>
-                </tr>
-              
-                <tr>
-                  <td>تأسیس رشته و سرفصل‌های مصوب فلسفه ذهن</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="35" onchange="updateGoalComp(1, 1, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">تصویب سرفصل و ایجاد دوره‌های تکمیلی در دانشگاه‌ها</td>
-                  <td style="font-size:.82rem">۱۹۶ سرفصل مصوب و ایجاد دوره دکتری</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="70" onchange="updateGoalComp(1, 1, 'achievement', this.value)">٪</td>
-                </tr>
-              
-                <tr>
-                  <td>نظریه‌پردازی بین‌المللی و مدل‌های تجربی بومی</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="30" onchange="updateGoalComp(1, 2, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">رویدادهای بین المللی و انتشارات بین المللی و مدلهای بومی</td>
-                  <td style="font-size:.82rem">کنفرانس بین المللی فلسفه ذهن، هسته های پژوهشی فلسفه ذهن</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="20" onchange="updateGoalComp(1, 2, 'achievement', this.value)">٪</td>
-                </tr>
-              
-            </tbody>
-            <tfoot>
-              <tr>
-                <td>حاصل‌جمع وزنی هدف 1</td>
-                <td>100٪</td>
-                <td colspan="2">بازه عدم‌قطعیت ۹۰٪: [54٪ تا 70٪]</td>
-                <td style="color:var(--primary-dark);font-size:1.05rem">62٪</td>
-              </tr>
-            </tfoot>
-          </table>
+        <div style="border:1px solid var(--border);border-radius:10px;padding:16px;background:#f8fafc;position:relative;">
+          <button class="btn btn-secondary btn-sm" style="position:absolute;top:16px;left:16px;" onclick="editChallengeModal(1)">✏️ ویرایش</button>
+          <div style="font-weight:bold;color:var(--primary-dark);font-size:1rem;margin-bottom:6px;padding-left:70px;">📌 چالش 1: توسعه بازار و تجاری‌سازی صنعتی فناوری‌های شناختی</div>
+          <p style="font-size:.88rem;margin-bottom:8px"><b>شرح چالش در زیست‌بوم:</b> تنها ۶۰ محصول به بازار رسیده‌اند و بازار کل زیست‌بوم ۱۴۵ میلیون دلار است؛ عقب‌ماندگی از بازار ۵۰ میلیارد دلاری جهانی نوروتک.</p>
+          <p style="font-size:.88rem;color:#166534"><b>راهکار پیشنهادی موج دوم:</b> تسهیل ورود شرکت‌ها به بورس و فرابورس، راه‌اندازی شتاب‌دهنده‌های صنعتی تخصصی و خرید تضمینی دستگاه‌های ساخت داخل توسط بیمارستان‌ها.</p>
         </div>
-        
-        <div class="action-card" style="border-right:5px solid var(--green-light)">
-          <div class="action-head">
-            <div>
-              <div class="action-title">هدف 2: تولید و توسعه علوم پایه در مطالعات مغز</div>
-              <div class="action-meta">
-                <span>وزن هدف: <b>14.3٪</b></span>
-                <span>بازه عدم‌قطعیت ۹۰٪: <span class="ci-pill">[80.8٪ – 94.7٪]</span></span>
-                <span>تارگت: پیشتازی منطقه‌ای در تولید دانش علوم پایه و تحقیقات عصب‌شناختی</span>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px">
-              <span class="badge badge-green-light">دستاورد عینی</span>
-              <span style="font-size:1.3rem;font-weight:bold;color:var(--primary-dark)">87.8%</span>
-              <button class="btn btn-secondary btn-sm" onclick="editGoalModal(2)">✏️ ویرایش</button>
-            </div>
-          </div>
-          <div style="margin:8px 0;font-size:.85rem;color:#334155"><b>عملکرد واقعی رسمی:</b> رتبه ۱۳ جهانی در علوم اعصاب رفتاری؛ شبکه آزمایشگاهی فعال</div>
-          
-          <table class="custom-table">
-            <thead>
-              <tr>
-                <th style="width:38%">مؤلفه / شاخص شواهد</th>
-                <th style="width:12%">وزن</th>
-                <th style="width:22%">تارگت شاخص</th>
-                <th style="width:18%">وضعیت مشاهده‌شده</th>
-                <th style="width:10%">درصد تحقق</th>
-              </tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>تولید مقالات معتبر و جایگاه بین‌المللی علوم پایه</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="30" onchange="updateGoalComp(2, 0, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">رتبه زیر ۲۰ جهانی در علوم پایه</td>
-                  <td style="font-size:.82rem">رتبه ۱۳ و ۱۷ جهان در وبگاه‌های Scopus و SCImago</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="95" onchange="updateGoalComp(2, 0, 'achievement', this.value)">٪</td>
-                </tr>
-              
-                <tr>
-                  <td>توسعه زیرساخت‌های آزمایشگاهی و تصویربرداری ملی</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="25" onchange="updateGoalComp(2, 1, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">استقرار ادوات تصویربرداری کلان</td>
-                  <td style="font-size:.82rem">بهره‌برداری کامل از NBML</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="100" onchange="updateGoalComp(2, 1, 'achievement', this.value)">٪</td>
-                </tr>
-              
-                <tr>
-                  <td>مدل‌سازی‌های حیوانی و تحقیقات درون‌تنی پیش‌بالینی</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="25" onchange="updateGoalComp(2, 2, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">تکمیل مرکز ملی نخستی‌سانان</td>
-                  <td style="font-size:.82rem">اتمام نازک‌کاری فاز ۱ مرکز ۳۶هزار متری رویان</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="65" onchange="updateGoalComp(2, 2, 'achievement', this.value)">٪</td>
-                </tr>
-              
-                <tr>
-                  <td>توسعه شبکه آزمایشگاهی</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="20" onchange="updateGoalComp(2, 3, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">آزمایشگاه های ثبت شده در شبکه labsnet</td>
-                  <td style="font-size:.82rem">ثبت 80 آزمایشگاه</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="90" onchange="updateGoalComp(2, 3, 'achievement', this.value)">٪</td>
-                </tr>
-              
-            </tbody>
-            <tfoot>
-              <tr>
-                <td>حاصل‌جمع وزنی هدف 2</td>
-                <td>100٪</td>
-                <td colspan="2">بازه عدم‌قطعیت ۹۰٪: [80.8٪ تا 94.7٪]</td>
-                <td style="color:var(--primary-dark);font-size:1.05rem">87.8٪</td>
-              </tr>
-            </tfoot>
-          </table>
+      
+        <div style="border:1px solid var(--border);border-radius:10px;padding:16px;background:#f8fafc;position:relative;">
+          <button class="btn btn-secondary btn-sm" style="position:absolute;top:16px;left:16px;" onclick="editChallengeModal(2)">✏️ ویرایش</button>
+          <div style="font-weight:bold;color:var(--primary-dark);font-size:1rem;margin-bottom:6px;padding-left:70px;">📌 چالش 2: پوشش بیمه خدمات توانبخشی شناختی</div>
+          <p style="font-size:.88rem;margin-bottom:8px"><b>شرح چالش در زیست‌بوم:</b> عدم تعهد سازمان‌های بیمه‌گر در پرداخت هزینه‌های بازتوانی و غربالگری شناختی، تقاضای درمانی را با بحران مواجه کرده است.</p>
+          <p style="font-size:.88rem;color:#166534"><b>راهکار پیشنهادی موج دوم:</b> تصویب کدهای تعرفه‌ای خدمات شناختی در شورای عالی بیمه سلامت و درج در سبد خدمات پایه بیمه‌ای کشور.</p>
         </div>
-        
-        <div class="action-card" style="border-right:5px solid var(--green-light)">
-          <div class="action-head">
-            <div>
-              <div class="action-title">هدف 3: روش‌های پرورش و تقویت کارکردهای شناختی</div>
-              <div class="action-meta">
-                <span>وزن هدف: <b>14.3٪</b></span>
-                <span>بازه عدم‌قطعیت ۹۰٪: <span class="ci-pill">[64.5٪ – 80.5٪]</span></span>
-                <span>تارگت: سامانه‌های ملی تقویت شناختی در مدارس و اقشار جامعه</span>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px">
-              <span class="badge badge-green-light">دستاورد عینی</span>
-              <span style="font-size:1.3rem;font-weight:bold;color:var(--primary-dark)">72.5%</span>
-              <button class="btn btn-secondary btn-sm" onclick="editGoalModal(3)">✏️ ویرایش</button>
-            </div>
-          </div>
-          <div style="margin:8px 0;font-size:.85rem;color:#334155"><b>عملکرد واقعی رسمی:</b> توسعه بازی‌های استاندارد و آزمون‌های غربالگری؛ اما نمرات تیمز و پرلز افت داشته است</div>
-          
-          <table class="custom-table">
-            <thead>
-              <tr>
-                <th style="width:38%">مؤلفه / شاخص شواهد</th>
-                <th style="width:12%">وزن</th>
-                <th style="width:22%">تارگت شاخص</th>
-                <th style="width:18%">وضعیت مشاهده‌شده</th>
-                <th style="width:10%">درصد تحقق</th>
-              </tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>ابزارها و بازی‌های شناختی استانداردشده</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="30" onchange="updateGoalComp(3, 0, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">استانداردسازی بازی‌ها و اسباب‌بازی‌ها</td>
-                  <td style="font-size:.82rem">همکاری با کانون و بنیاد ملی بازی‌های رایانه‌ای</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="75" onchange="updateGoalComp(3, 0, 'achievement', this.value)">٪</td>
-                </tr>
-              
-                <tr>
-                  <td>آزمون‌ها و سامانه‌های غربالگری شناختی</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="30" onchange="updateGoalComp(3, 1, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">پلتفرم ملی غربالگری مدارس</td>
-                  <td style="font-size:.82rem">استقرار پورتال و بانک آزمون‌های غربالگری</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="70" onchange="updateGoalComp(3, 1, 'achievement', this.value)">٪</td>
-                </tr>
-              
-                <tr>
-                  <td>ارتقای سواد شناختی و مهارت‌های عمومی یادگیری</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="30" onchange="updateGoalComp(3, 2, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">رشد مهارت‌های خواندن و ریاضی</td>
-                  <td style="font-size:.82rem">مسابقات Brain Bee، رویدادهای هفته آگاهی از مغز، کارسوق های دانش آموزی، برنامه شاد، کمپین‌ها و مستند سینمایی کاپیتان من</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="90" onchange="updateGoalComp(3, 2, 'achievement', this.value)">٪</td>
-                </tr>
-              
-                <tr>
-                  <td>کلینیک های رشد و تکامل</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="10" onchange="updateGoalComp(3, 3, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">تعداد کلینیک</td>
-                  <td style="font-size:.82rem">تعداد 2 کلینیک</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="20" onchange="updateGoalComp(3, 3, 'achievement', this.value)">٪</td>
-                </tr>
-              
-            </tbody>
-            <tfoot>
-              <tr>
-                <td>حاصل‌جمع وزنی هدف 3</td>
-                <td>100٪</td>
-                <td colspan="2">بازه عدم‌قطعیت ۹۰٪: [64.5٪ تا 80.5٪]</td>
-                <td style="color:var(--primary-dark);font-size:1.05rem">72.5٪</td>
-              </tr>
-            </tfoot>
-          </table>
+      
+        <div style="border:1px solid var(--border);border-radius:10px;padding:16px;background:#f8fafc;position:relative;">
+          <button class="btn btn-secondary btn-sm" style="position:absolute;top:16px;left:16px;" onclick="editChallengeModal(3)">✏️ ویرایش</button>
+          <div style="font-weight:bold;color:var(--primary-dark);font-size:1rem;margin-bottom:6px;padding-left:70px;">📌 چالش 3: تولید متون آموزشی بومی و نظریه‌پردازی و پارادایم اسلامی</div>
+          <p style="font-size:.88rem;margin-bottom:8px"><b>شرح چالش در زیست‌بوم:</b> تداوم تدریس متون ترجمه‌ای غربی در دانشگاه‌ها و کم‌رنگ بودن همگرایی حوزوی-دانشگاهی در مدل‌های آزمون‌پذیر ذهن.</p>
+          <p style="font-size:.88rem;color:#166534"><b>راهکار پیشنهادی موج دوم:</b> تأسیس قطب دائمی مطالعات فلسفه ذهن و علوم اعصاب با مدیریت مشترک حوزه و دانشگاه، و اعطای گرنت ویژه تألیف کتب مرجع.</p>
         </div>
-        
-        <div class="action-card" style="border-right:5px solid var(--yellow)">
-          <div class="action-head">
-            <div>
-              <div class="action-title">هدف 4: ابزارها و فناوری‌های واسط مغز و رایانه (BCI)</div>
-              <div class="action-meta">
-                <span>وزن هدف: <b>14.3٪</b></span>
-                <span>بازه عدم‌قطعیت ۹۰٪: <span class="ci-pill">[48.5٪ – 64.5٪]</span></span>
-                <span>تارگت: طراحی و ساخت سامانه‌های پیشرفته واسط مغز و رایانه و تحریک عمقی</span>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px">
-              <span class="badge badge-yellow">خروجی اولیه</span>
-              <span style="font-size:1.3rem;font-weight:bold;color:var(--primary-dark)">56.5%</span>
-              <button class="btn btn-secondary btn-sm" onclick="editGoalModal(4)">✏️ ویرایش</button>
-            </div>
-          </div>
-          <div style="margin:8px 0;font-size:.85rem;color:#334155"><b>عملکرد واقعی رسمی:</b> ادوات آزمایشگاهی و DBS در موش و میمون با ۱۰۰ میلیارد ریال اعتبار؛ بدون ایمپلنت بالینی انسانی</div>
-          
-          <table class="custom-table">
-            <thead>
-              <tr>
-                <th style="width:38%">مؤلفه / شاخص شواهد</th>
-                <th style="width:12%">وزن</th>
-                <th style="width:22%">تارگت شاخص</th>
-                <th style="width:18%">وضعیت مشاهده‌شده</th>
-                <th style="width:10%">درصد تحقق</th>
-              </tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>دستگاه‌های آزمایشگاهی ثبت و پردازش سیگنال مغز</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="30" onchange="updateGoalComp(4, 0, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">بومی‌سازی تجهیزات آزمایشگاهی BCI</td>
-                  <td style="font-size:.82rem">بومی‌سازی EEG، fNIRS و TMS در ۵۰ مرکز</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="80" onchange="updateGoalComp(4, 0, 'achievement', this.value)">٪</td>
-                </tr>
-              
-                <tr>
-                  <td>سامانه‌های تحریک عمقی مغز (DBS) و فاز حیوانی</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="30" onchange="updateGoalComp(4, 1, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">پایان آزمون‌های حیوانی پریمات‌ها</td>
-                  <td style="font-size:.82rem">فاز ۱ موش، فاز ۲ میمون با تخصیص ۱۰۰ میلیارد ریال</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="60" onchange="updateGoalComp(4, 1, 'achievement', this.value)">٪</td>
-                </tr>
-              
-                <tr>
-                  <td>ایمپلنت‌های پیشرفته بالینی و گجت‌های صنعتی</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="30" onchange="updateGoalComp(4, 2, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">آغاز کارآزمایی بالینی انسانی</td>
-                  <td style="font-size:.82rem">عدم ورود به گجت‌های تجاری و پروتکل‌های انسانی</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="15" onchange="updateGoalComp(4, 2, 'achievement', this.value)">٪</td>
-                </tr>
-              
-                <tr>
-                  <td>کاربست فناوری ها در درمان ناهنجاری ها</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="10" onchange="updateGoalComp(4, 3, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">سلول درمانی</td>
-                  <td style="font-size:.82rem">اخذ مجوز سلول درمانی از سازمان غذا و دارو</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="100" onchange="updateGoalComp(4, 3, 'achievement', this.value)">٪</td>
-                </tr>
-              
-            </tbody>
-            <tfoot>
-              <tr>
-                <td>حاصل‌جمع وزنی هدف 4</td>
-                <td>100٪</td>
-                <td colspan="2">بازه عدم‌قطعیت ۹۰٪: [48.5٪ تا 64.5٪]</td>
-                <td style="color:var(--primary-dark);font-size:1.05rem">56.5٪</td>
-              </tr>
-            </tfoot>
-          </table>
+      
+        <div style="border:1px solid var(--border);border-radius:10px;padding:16px;background:#f8fafc;position:relative;">
+          <button class="btn btn-secondary btn-sm" style="position:absolute;top:16px;left:16px;" onclick="editChallengeModal(4)">✏️ ویرایش</button>
+          <div style="font-weight:bold;color:var(--primary-dark);font-size:1rem;margin-bottom:6px;padding-left:70px;">📌 چالش 4: تأمین مالی پیشرفته و رفع موانع سرمایه‌گذاری خطرپذیر (VC)</div>
+          <p style="font-size:.88rem;margin-bottom:8px"><b>شرح چالش در زیست‌بوم:</b> اتکای مفرط زیست‌بوم به کمک‌های بلاعوض معاونت علمی و ورود بسیار محدود سرمایه‌گذاران بخش خصوصی و نهادهای مالی.</p>
+          <p style="font-size:.88rem;color:#166534"><b>راهکار پیشنهادی موج دوم:</b> استفاده از ابزار اعتبار مالیاتی قانون جهش تولید دانش‌بنیان، صندوق‌های سرمایه‌گذاری جسورانه تخصصی و کرادفاندینگ.</p>
         </div>
-        
-        <div class="action-card" style="border-right:5px solid var(--yellow)">
-          <div class="action-head">
-            <div>
-              <div class="action-title">هدف 5: روش‌های درمان نابهنجاری‌ها و اصلاح کاستی‌ها</div>
-              <div class="action-meta">
-                <span>وزن هدف: <b>14.3٪</b></span>
-                <span>بازه عدم‌قطعیت ۹۰٪: <span class="ci-pill">[50.3٪ – 66.2٪]</span></span>
-                <span>تارگت: پوشش فراگیر درمانی و توانبخشی اختلالات روانی، دمانس و شناختی</span>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px">
-              <span class="badge badge-yellow">خروجی اولیه</span>
-              <span style="font-size:1.3rem;font-weight:bold;color:var(--primary-dark)">58.3%</span>
-              <button class="btn btn-secondary btn-sm" onclick="editGoalModal(5)">✏️ ویرایش</button>
-            </div>
-          </div>
-          <div style="margin:8px 0;font-size:.85rem;color:#334155"><b>عملکرد واقعی رسمی:</b> رتبه ۱۵ جهان در بازتوانی شناختی، تجهیز ۵۰ مرکز؛ اما چالش بزرگ عدم پوشش بیمه‌ای</div>
-          
-          <table class="custom-table">
-            <thead>
-              <tr>
-                <th style="width:38%">مؤلفه / شاخص شواهد</th>
-                <th style="width:12%">وزن</th>
-                <th style="width:22%">تارگت شاخص</th>
-                <th style="width:18%">وضعیت مشاهده‌شده</th>
-                <th style="width:10%">درصد تحقق</th>
-              </tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>پروتکل‌های بالینی بازتوانی شناختی و دمانس</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="35" onchange="updateGoalComp(5, 0, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">پروتکل‌های مصوب وزارت بهداشت</td>
-                  <td style="font-size:.82rem">رتبه ۱۵ جهانی بازتوانی شناختی در Scopus</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="75" onchange="updateGoalComp(5, 0, 'achievement', this.value)">٪</td>
-                </tr>
-              
-                <tr>
-                  <td>تجهیز مراکز درمانی و کلینیک‌های توانبخشی</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="35" onchange="updateGoalComp(5, 1, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">تجهیز ۱۰۰ مرکز بیمارستانی</td>
-                  <td style="font-size:.82rem">تجهیز ۵۰ مرکز درمانی با ادوات بومی ۵۰ شرکت</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="70" onchange="updateGoalComp(5, 1, 'achievement', this.value)">٪</td>
-                </tr>
-              
-                <tr>
-                  <td>پوشش بیمه سلامت و ادغام در شبکه بهداشت</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="30" onchange="updateGoalComp(5, 2, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">پوشش ۱۰۰٪ بیمه خدمات شناختی</td>
-                  <td style="font-size:.82rem">عدم تصویب پوشش بیمه‌ای خدمات شناختی</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="25" onchange="updateGoalComp(5, 2, 'achievement', this.value)">٪</td>
-                </tr>
-              
-            </tbody>
-            <tfoot>
-              <tr>
-                <td>حاصل‌جمع وزنی هدف 5</td>
-                <td>100٪</td>
-                <td colspan="2">بازه عدم‌قطعیت ۹۰٪: [50.3٪ تا 66.2٪]</td>
-                <td style="color:var(--primary-dark);font-size:1.05rem">58.3٪</td>
-              </tr>
-            </tfoot>
-          </table>
+      
+        <div style="border:1px solid var(--border);border-radius:10px;padding:16px;background:#f8fafc;position:relative;">
+          <button class="btn btn-secondary btn-sm" style="position:absolute;top:16px;left:16px;" onclick="editChallengeModal(5)">✏️ ویرایش</button>
+          <div style="font-weight:bold;color:var(--primary-dark);font-size:1rem;margin-bottom:6px;padding-left:70px;">📌 چالش 5: شتاب‌بخشی به فاز بالینی واسط‌های مغز و رایانه (BCI) و تراشه‌های عصبی</div>
+          <p style="font-size:.88rem;margin-bottom:8px"><b>شرح چالش در زیست‌بوم:</b> پروژه‌های تحریک عمقی مغز در فاز حیوانی متوقف مانده و عدم ورود به ایمپلنت‌های انسانی و تراشه‌های نیمه‌هادی نورومورفیک.</p>
+          <p style="font-size:.88rem;color:#166534"><b>راهکار پیشنهادی موج دوم:</b> ایجاد کنسرسیوم مشترک نانو-میکروالکترونیک و علوم شناختی جهت ساخت تراشه و آغاز سریع‌تر کارآزمایی‌های بالینی تحت نظارت اخلاق پزشکی.</p>
         </div>
-        
-        <div class="action-card" style="border-right:5px solid var(--yellow)">
-          <div class="action-head">
-            <div>
-              <div class="action-title">هدف 6: سامانه‌های مصنوعی الهام‌گرفته از مغز (Cognitive AI)</div>
-              <div class="action-meta">
-                <span>وزن هدف: <b>14.3٪</b></span>
-                <span>بازه عدم‌قطعیت ۹۰٪: <span class="ci-pill">[45٪ – 61٪]</span></span>
-                <span>تارگت: توسعه هوش مصنوعی شناختی و تراشه‌های سخت‌افزاری نورومورفیک</span>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px">
-              <span class="badge badge-yellow">خروجی اولیه</span>
-              <span style="font-size:1.3rem;font-weight:bold;color:var(--primary-dark)">53%</span>
-              <button class="btn btn-secondary btn-sm" onclick="editGoalModal(6)">✏️ ویرایش</button>
-            </div>
-          </div>
-          <div style="margin:8px 0;font-size:.85rem;color:#334155"><b>عملکرد واقعی رسمی:</b> رتبه ۱۲ جهان در AI کاربردی در علوم اعصاب؛ اما تراشه‌های سخت‌افزاری در حد تست آزمایشگاهی</div>
-          
-          <table class="custom-table">
-            <thead>
-              <tr>
-                <th style="width:38%">مؤلفه / شاخص شواهد</th>
-                <th style="width:12%">وزن</th>
-                <th style="width:22%">تارگت شاخص</th>
-                <th style="width:18%">وضعیت مشاهده‌شده</th>
-                <th style="width:10%">درصد تحقق</th>
-              </tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>الگوریتم‌های یادگیری ماشین الهام‌گرفته از مغز</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="40" onchange="updateGoalComp(6, 0, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">رتبه برتر در مدل‌های نوروالگوریتم</td>
-                  <td style="font-size:.82rem">رتبه ۱۲ جهان در هوش مصنوعی شناختی در مقالات</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="70" onchange="updateGoalComp(6, 0, 'achievement', this.value)">٪</td>
-                </tr>
-              
-                <tr>
-                  <td>مدل‌های محاسباتی مغز و شبیه‌سازی شبکه‌های عصبی</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="30" onchange="updateGoalComp(6, 1, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">توسعه ابزارهای شبیه‌ساز مغز</td>
-                  <td style="font-size:.82rem">پروژه‌های پژوهشی دانشگاه‌های شریف و تهران</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="50" onchange="updateGoalComp(6, 1, 'achievement', this.value)">٪</td>
-                </tr>
-              
-                <tr>
-                  <td>سخت‌افزارها و تراشه‌های نورومورفیک نیمه‌هادی</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="20" onchange="updateGoalComp(6, 2, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">ساخت نمونه نیمه‌صنعتی تراشه نورومورفیک</td>
-                  <td style="font-size:.82rem">پروژه‌های آزمایشگاهی محدود بدون تولید نیمه‌هادی</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="5" onchange="updateGoalComp(6, 2, 'achievement', this.value)">٪</td>
-                </tr>
-              
-                <tr>
-                  <td>زیست تراشه ها</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="10" onchange="updateGoalComp(6, 3, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">اکتساب فناوری ارگانوئید مغزی</td>
-                  <td style="font-size:.82rem">اکتساب فناوری ارگانوئید مغزی</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="90" onchange="updateGoalComp(6, 3, 'achievement', this.value)">٪</td>
-                </tr>
-              
-            </tbody>
-            <tfoot>
-              <tr>
-                <td>حاصل‌جمع وزنی هدف 6</td>
-                <td>100٪</td>
-                <td colspan="2">بازه عدم‌قطعیت ۹۰٪: [45٪ تا 61٪]</td>
-                <td style="color:var(--primary-dark);font-size:1.05rem">53٪</td>
-              </tr>
-            </tfoot>
-          </table>
+      
+        <div style="border:1px solid var(--border);border-radius:10px;padding:16px;background:#f8fafc;position:relative;">
+          <button class="btn btn-secondary btn-sm" style="position:absolute;top:16px;left:16px;" onclick="editChallengeModal(6)">✏️ ویرایش</button>
+          <div style="font-weight:bold;color:var(--primary-dark);font-size:1rem;margin-bottom:6px;padding-left:70px;">📌 چالش 6: فروکاست علوم شناختی به فناوری، ربات و محصول‌محوری</div>
+          <p style="font-size:.88rem;margin-bottom:8px"><b>شرح چالش در زیست‌بوم:</b> تقلیل علوم شناختی به ربات، فناوری و محصول و کم‌توجهی به ماهیت انسان‌محور، فرهنگی، اجتماعی، فلسفی و تمدنی آن، موجب عدم توازن میان توسعه فناوری و توسعه فهم و تعالی انسان می‌شود.</p>
+          <p style="font-size:.88rem;color:#166534"><b>راهکار پیشنهادی موج دوم:</b> راهکار پیشنهادی موج دوم: بازتعریف علوم شناختی با تأکید هم‌زمان بر انسان، فرهنگ و فناوری؛ به‌گونه‌ای که توسعه فناوری و محصول در کنار پژوهش‌های بنیادی، فلسفی، زبانی، اجتماعی و فرهنگی و با هدف فهم و تعالی انسان دنبال شود.</p>
         </div>
-        
-        <div class="action-card" style="border-right:5px solid var(--green-light)">
-          <div class="action-head">
-            <div>
-              <div class="action-title">هدف 7: کسب رتبه اول منطقه‌ای و مرجعیت علمی</div>
-              <div class="action-meta">
-                <span>وزن هدف: <b>14.3٪</b></span>
-                <span>بازه عدم‌قطعیت ۹۰٪: <span class="ci-pill">[70.5٪ – 86.5٪]</span></span>
-                <span>تارگت: رتبه اول بدون رقیب خاورمیانه و کشورهای اسلامی در تمام ابعاد</span>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px">
-              <span class="badge badge-green-light">دستاورد عینی</span>
-              <span style="font-size:1.3rem;font-weight:bold;color:var(--primary-dark)">78.5%</span>
-              <button class="btn btn-secondary btn-sm" onclick="editGoalModal(7)">✏️ ویرایش</button>
-            </div>
-          </div>
-          <div style="margin:8px 0;font-size:.85rem;color:#334155"><b>عملکرد واقعی رسمی:</b> رتبه اول منطقه و جهان اسلام در مقالات؛ کرسی یونسکو؛ شکاف در صادرات و فناوری</div>
-          
-          <table class="custom-table">
-            <thead>
-              <tr>
-                <th style="width:38%">مؤلفه / شاخص شواهد</th>
-                <th style="width:12%">وزن</th>
-                <th style="width:22%">تارگت شاخص</th>
-                <th style="width:18%">وضعیت مشاهده‌شده</th>
-                <th style="width:10%">درصد تحقق</th>
-              </tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>رتبه اول مقالات و استنادات علمی خاورمیانه</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="40" onchange="updateGoalComp(7, 0, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">تثبیت رتبه ۱ منطقه</td>
-                  <td style="font-size:.82rem">تحقق ۱۰۰٪ رتبه اول منطقه و جهان اسلام</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="100" onchange="updateGoalComp(7, 0, 'achievement', this.value)">٪</td>
-                </tr>
-              
-                <tr>
-                  <td>دیپلماسی علمی و کسب کرسی‌های بین‌المللی</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="30" onchange="updateGoalComp(7, 1, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">مرجعیت در یونسکو و OIC</td>
-                  <td style="font-size:.82rem">اعطای کرسی یونسکو به پژوهشکده علوم شناختی (ICSS)</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="70" onchange="updateGoalComp(7, 1, 'achievement', this.value)">٪</td>
-                </tr>
-              
-                <tr>
-                  <td>صادرات محصولات و خدمات فناورانه به منطقه</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="10" onchange="updateGoalComp(7, 2, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">صادرات ۱۰۰ میلیون دلاری به منطقه</td>
-                  <td style="font-size:.82rem">صادرات بسیار محدود با موانع تحریم بانکی</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="15" onchange="updateGoalComp(7, 2, 'achievement', this.value)">٪</td>
-                </tr>
-              
-                <tr>
-                  <td>تعاملات بین المللی بریکس</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="20" onchange="updateGoalComp(7, 3, 'weight', this.value)">٪</td>
-                  <td style="font-size:.82rem;color:var(--muted)">ایجاد پلتفرم BRICS GRAIN</td>
-                  <td style="font-size:.82rem">ایجاد پلتفرم BRICS GRAIN</td>
-                  <td><input class="inline-input" type="number" min="0" max="100" value="80" onchange="updateGoalComp(7, 3, 'achievement', this.value)">٪</td>
-                </tr>
-              
-            </tbody>
-            <tfoot>
-              <tr>
-                <td>حاصل‌جمع وزنی هدف 7</td>
-                <td>100٪</td>
-                <td colspan="2">بازه عدم‌قطعیت ۹۰٪: [70.5٪ تا 86.5٪]</td>
-                <td style="color:var(--primary-dark);font-size:1.05rem">78.5٪</td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-        
+      
     </div>
   </div>
   </div>
@@ -706,29 +261,11 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
   <div class="modal-content">
     <button class="close-btn" onclick="closeModal()">×</button>
     <div id="modalBody">
-    <h2>تنظیم اوزان کاربر</h2>
-    <div class="alert-box alert-info">اوزان فقط در سناریوی «اوزان کاربر» استفاده می‌شوند. مجموع اعداد می‌تواند هر مقدار مثبتی باشد؛ سامانه هنگام محاسبه آن‌ها را نرمال می‌کند.</div>
-    
-    <div class="form-row" style="align-items:center">
-      <div class="form-group" style="margin-bottom:8px"><label>رکن 1: احراز رتبه اول منطقه و مرجعیت علمی</label></div>
-      <div class="form-group" style="margin-bottom:8px"><input type="number" id="mW_1" min="0" step="0.1" value="20"></div>
-    </div>
-    <div class="form-row" style="align-items:center">
-      <div class="form-group" style="margin-bottom:8px"><label>رکن 2: رفاه اجتماعی، سلامت و پرورش انسان</label></div>
-      <div class="form-group" style="margin-bottom:8px"><input type="number" id="mW_2" min="0" step="0.1" value="40"></div>
-    </div>
-    <div class="form-row" style="align-items:center">
-      <div class="form-group" style="margin-bottom:8px"><label>رکن 3: تولید ثروت، فناوری و اقتدار ملی</label></div>
-      <div class="form-group" style="margin-bottom:8px"><input type="number" id="mW_3" min="0" step="0.1" value="15"></div>
-    </div>
-    <div class="form-row" style="align-items:center">
-      <div class="form-group" style="margin-bottom:8px"><label>رکن 4: شناخت و تعالی انسان بر مبنای اسلامی</label></div>
-      <div class="form-group" style="margin-bottom:8px"><input type="number" id="mW_4" min="0" step="0.1" value="25"></div>
-    </div>
-    <div style="margin-top:10px;padding:10px;background:#f8fafc;border:1px solid var(--border);border-radius:8px">مجموع فعلی: <b id="mW_sum">100</b>٪</div>
-    <div style="margin-top:20px;text-align:left;border-top:1px solid var(--border);padding-top:15px">
-      <button class="btn btn-primary" onclick="saveCustomWeights()">💾 ذخیره اوزان کاربر</button>
-    </div>
+    <h2>افزودن چالش جدید</h2>
+    <div class="form-group"><label>عنوان چالش</label><input id="mC_new_title" placeholder="عنوان چالش..."></div>
+    <div class="form-group"><label>شرح چالش</label><textarea id="mC_new_desc"></textarea></div>
+    <div class="form-group"><label>راهکار پیشنهادی</label><textarea id="mC_new_sugg"></textarea></div>
+    <button class="btn btn-success" onclick="saveNewChallenge()">💾 ثبت چالش</button>
   </div>
   </div>
 </div>
@@ -743,10 +280,10 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
     "title": "سند راهبردی علوم و فناوری‌های شناختی",
     "period": "۱۳۹۰–۱۴۰۴ (موج اول)",
     "horizon": "۱۴۰۴ (آماده‌سازی موج دوم ۱۴۰۵–۱۴۲۰)",
-    "lastUpdate": "2026-10-04T13:09:09.608Z",
+    "lastUpdate": "2026-10-04T14:19:35.802Z",
     "evaluator": "دبیرخانه شورای عالی انقلاب فرهنگی – ستاد توسعه علوم و فناوری‌های شناختی",
     "methodology": "چارچوب اندازه‌گیری و اقتصاد اطلاعات کاربردی (AIE) داگلاس هابارد",
-    "lastCalculatedAt": "2026-10-04T13:09:09.608Z",
+    "lastCalculatedAt": "2026-10-04T14:19:35.802Z",
     "schemaVersion": 2,
     "uncertainty": {
       "confidenceLevel": 0.9,
@@ -797,7 +334,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -842,7 +379,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -887,7 +424,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -932,7 +469,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     }
   ],
@@ -979,7 +516,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -1031,7 +568,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -1083,7 +620,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -1135,7 +672,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -1180,7 +717,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -1232,7 +769,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -1284,7 +821,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     }
   ],
@@ -1310,7 +847,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -1336,7 +873,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -1360,7 +897,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -1386,7 +923,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -1410,7 +947,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -1435,7 +972,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     }
   ],
@@ -1502,7 +1039,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -1567,7 +1104,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -1632,7 +1169,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -1697,7 +1234,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -1762,7 +1299,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -1827,7 +1364,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -1892,7 +1429,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -1957,7 +1494,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -2013,7 +1550,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -2069,7 +1606,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -2125,7 +1662,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -2190,7 +1727,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -2246,7 +1783,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -2311,7 +1848,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -2367,7 +1904,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -2432,7 +1969,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     },
     {
@@ -2497,7 +2034,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
         "confidenceLevel": 0.9,
         "method": "calibrated-sigma-model",
         "derived": true,
-        "lastCalculatedAt": "2026-10-04T13:09:09.608Z"
+        "lastCalculatedAt": "2026-10-04T14:19:35.802Z"
       }
     }
   ],
@@ -2543,7 +2080,7 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
     },
     {
       "id": 3,
-      "title": "تولید متون آموزشی بومی و نظریه‌پردازی پارادایمیک اسلامی",
+      "title": "تولید متون آموزشی بومی و نظریه‌پردازی و پارادایم اسلامی",
       "description": "تداوم تدریس متون ترجمه‌ای غربی در دانشگاه‌ها و کم‌رنگ بودن همگرایی حوزوی-دانشگاهی در مدل‌های آزمون‌پذیر ذهن.",
       "suggestion": "تأسیس قطب دائمی مطالعات فلسفه ذهن و علوم اعصاب با مدیریت مشترک حوزه و دانشگاه، و اعطای گرنت ویژه تألیف کتب مرجع."
     },
@@ -2558,6 +2095,12 @@ table.custom-table tfoot td{font-weight:bold;background:#f1f5f9;border-top:2px s
       "title": "شتاب‌بخشی به فاز بالینی واسط‌های مغز و رایانه (BCI) و تراشه‌های عصبی",
       "description": "پروژه‌های تحریک عمقی مغز در فاز حیوانی متوقف مانده و عدم ورود به ایمپلنت‌های انسانی و تراشه‌های نیمه‌هادی نورومورفیک.",
       "suggestion": "ایجاد کنسرسیوم مشترک نانو-میکروالکترونیک و علوم شناختی جهت ساخت تراشه و آغاز سریع‌تر کارآزمایی‌های بالینی تحت نظارت اخلاق پزشکی."
+    },
+    {
+      "id": 6,
+      "title": "فروکاست علوم شناختی به فناوری، ربات و محصول‌محوری",
+      "description": "تقلیل علوم شناختی به ربات، فناوری و محصول و کم‌توجهی به ماهیت انسان‌محور، فرهنگی، اجتماعی، فلسفی و تمدنی آن، موجب عدم توازن میان توسعه فناوری و توسعه فهم و تعالی انسان می‌شود.",
+      "suggestion": "راهکار پیشنهادی موج دوم: بازتعریف علوم شناختی با تأکید هم‌زمان بر انسان، فرهنگ و فناوری؛ به‌گونه‌ای که توسعه فناوری و محصول در کنار پژوهش‌های بنیادی، فلسفی، زبانی، اجتماعی و فرهنگی و با هدف فهم و تعالی انسان دنبال شود."
     }
   ]
 }
